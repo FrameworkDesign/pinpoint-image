@@ -1,0 +1,19 @@
+{
+    "name": "weareframework/pinpoint-image",
+    "autoload": {
+        "psr-4": {
+            "Weareframework\\PinpointImage\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Pinpoint Image",
+            "description": "Pinpoint Image addon"
+        },
+        "laravel": {
+            "providers": [
+                "Weareframework\\PinpointImage\\ServiceProvider"
+            ]
+        }
+    }
+}
