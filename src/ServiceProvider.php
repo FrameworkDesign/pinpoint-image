@@ -4,6 +4,7 @@ namespace Weareframework\PinpointImage;
 
 use Statamic\Providers\AddonServiceProvider;
 use Weareframework\PinpointImage\Fieldtypes\PinPointImage;
+use Weareframework\PinpointImage\Tags\PinPointImageTag;
 
 class ServiceProvider extends AddonServiceProvider
 {
