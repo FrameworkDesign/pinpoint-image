@@ -1,7 +1,7 @@
 <template>
     <div>
         <assets-fieldtype
-            :value="value"
+            :value="assetImage"
             :config="config"
             :meta="meta"
             :handle="handle"
@@ -34,7 +34,6 @@
 
             </div>
         </div>
-        <div @click.prevent="currentValue" class="btn">Current Value</div>
     </div>
 </template>
 
@@ -49,70 +48,81 @@ export default {
     mixins: [Fieldtype],
 
     mounted() {
-        this.hasImage = (this.value !== null && this.value.image);
+        if (this.value !== null && this.value.image && this.value.image.length > 0) {
+           this.getImageAsset(this.value.image)
+        }
+
+        if (this.value !== null && this.value.annotations && this.value.annotations.length > 0) {
+            this.annotations = this.value.annotations
+        }
     },
 
     data() {
         return {
+            fieldValue: this.value || { "image": {}, "annotations": []},
             hasImage: false,
             containerWidth: null,
+            image: [],
             annotations: [],
             loading: false,
             assets: null
         };
     },
 
+    watch: {
+        fieldValue: {
+            deep: true,
+            handler (data) {
+                this.updateDebounced(data);
+            }
+        },
+    },
+
     computed: {
         imageUrl() {
-            if (this.hasImage && this.meta.image && this.meta.image.data && this.meta.image.data.length > 0) {
-                return this.meta.image.data[0].thumbnail
+            if (this.hasImage && this.image && this.image.data && this.image.data.length > 0) {
+                return this.image.data[0].thumbnail
             }
             return null;
+        },
+        assetImage() {
+            return [this.fieldValue.image]
         }
     },
     methods: {
-        currentValue() {
-            console.log('currentValue', this.value, this.meta)
-        },
         updateAnnotation(updatedData) {
-            let pinpointImageValue = this.value
             this.$set(this.annotations, updatedData.index, updatedData.data);
-            // Vue.set(pinpointImageValue, 'annotations', this.annotations);
-            // this.updateDebounced(pinpointImageValue);
         },
         updateKey(value) {
-            console.log('updateKey', value)
-            if(value === null) {
+            if (value === null) {
+                this.image = null;
+                this.fieldValue.image = null;
+                return;
+            }
+            if (value.length === 0) {
+                this.image = null;
+                this.fieldValue.image = null;
                 return;
             }
 
-            if(value.length === 0) {
-                return;
-            }
+            this.getImageAsset(value[0])
+        },
 
-            let pinpointImageValue = this.value
-            Vue.set(pinpointImageValue, 'image', value);
-            this.updateDebounced(pinpointImageValue);
-
-            this.hasImage = (pinpointImageValue.image !== null)
-            if (this.hasImage === true) {
-                this.loading = true
-
-                this.$axios.get(this.cpUrl('assets-fieldtype'), {
-                    params: { assets: pinpointImageValue.image }
-                }).then(response => {
-                    this.meta = {
-                        annotations : this.annotations,
-                        image: {
-                            container: "assets",
-                            data: response.data
-                        }
-                    }
-                    this.loading = false
-                });
-            } else {
-                // this.meta = null
-            }
+        getImageAsset(value) {
+            this.loading = true
+            this.$axios.get(this.cpUrl('assets-fieldtype'), {
+                params: { assets: value }
+            }).then(response => {
+                this.image = {
+                    container: "assets",
+                    data: response.data
+                }
+                this.fieldValue.image = value;
+                this.hasImage = true
+            })
+            .finally(() => {
+                this.loading = false
+            });
         },
 
         cpUrl(url) {
@@ -139,6 +149,7 @@ export default {
                     heading: ''
                 }
             })
+            this.fieldValue.annotations = this.annotations;
         },
 
         getPosition(el) {
@@ -171,6 +182,7 @@ export default {
         remove(index) {
             if (confirm('Are you sure you want to delete item?')) {
                 this.annotations.splice(index, 1)
+                this.fieldValue.annotations = this.annotations;
             }
         },
 

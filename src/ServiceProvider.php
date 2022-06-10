@@ -4,7 +4,7 @@ namespace Weareframework\PinpointImage;
 
 use Statamic\Providers\AddonServiceProvider;
 use Weareframework\PinpointImage\Fieldtypes\PinPointImage;
-use Weareframework\PinpointImage\Tags\PinPointImageTag;
+use Weareframework\PinpointImage\Tags\PinpointImageTag;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -13,7 +13,7 @@ class ServiceProvider extends AddonServiceProvider
     ];
 
     protected $tags = [
-        PinPointImageTag::class,
+        PinpointImageTag::class,
     ];
 
     protected $fieldtypes = [

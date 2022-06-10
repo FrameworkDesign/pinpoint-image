@@ -24,7 +24,10 @@ use Statamic\Support\Str;
 class PinPointImage extends Fieldtype
 {
     protected $categories = ['media', 'relationship'];
-    protected $defaultValue = [];
+    protected $defaultValue = [
+        'image' => null,
+        'annotations' => []
+    ];
     protected $selectableInForms = true;
 
     protected function configFieldItems(): array
@@ -91,18 +94,21 @@ class PinPointImage extends Fieldtype
         return false;
     }
 
+    /*
+     * how to load your data in
+     */
     public function preProcess($values)
     {
-        Log::info('PinPointImage preProcess: ' . json_encode($values));
-        if (is_null($values)) {
-            return [];
+        if (is_null($values) || empty($values)) {
+            return null;
         }
 
-//        return $this->fields()->addValues($data ?? [])->preProcess()->values()->all();
+        return $values;
+    }
 
-        return collect($values)->map(function ($value) {
-            return $this->valueToId($value);
-        })->filter()->values()->all();
+    public function process($data)
+    {
+        return $data;
     }
 
     protected function fields()
@@ -110,64 +116,33 @@ class PinPointImage extends Fieldtype
         return new BlueprintFields($this->fieldConfig());
     }
 
-    protected function valueToId($value)
-    {
-        if (Str::contains($value, '::')) {
-            return $value;
-        }
-
-        return optional($this->container()->asset($value))->id();
-    }
-
-    public function process($data)
-    {
-        Log::info('PinPointImage $data: ' . json_encode($data));
-        $max_files = (int) $this->config('max_files');
-
-        $values = collect($data)->map(function ($id) {
-            return Asset::find($id)->path();
-        });
-
-        return $this->config('max_files') === 1 ? $values->first() : $values->all();
-    }
-
     public function preload()
     {
         return [
-            'data' => $this->getItemData($this->field->value() ?? $this->defaultValue),
+            'default' => $this->defaultValue(),
+            'data' => $this->getItemData($this->field->value() ?? []),
             'container' => $this->container()->handle(),
         ];
     }
 
     public function getItemData($items)
     {
-        return collect($items)->map(function ($url) {
+        if (! isset($items['image'])) {
+            return null;
+        }
+
+        if (empty($items['image'])) {
+            return collect($items)->values();
+        }
+        $items['image'] = collect($items['image'])->map(function ($url) {
             return ($asset = Asset::find($url))
                 ? (new AssetResource($asset))->resolve()
                 : null;
         })->filter()->values();
+
+        return $items['image'];
     }
 
-    public function augment($value)
-    {
-        $assets = $this->getAssetsForAugmentation($value);
-
-        return $this->config('max_files') === 1 ? $assets->first() : $assets;
-    }
-
-    public function shallowAugment($value)
-    {
-        $assets = $this->getAssetsForAugmentation($value)->map->toShallowAugmentedCollection();
-
-        return $this->config('max_files') === 1 ? $assets->first() : $assets;
-    }
-
-    private function getAssetsForAugmentation($value)
-    {
-        return collect($value)->map(function ($path) {
-            return $this->container()->asset($path);
-        })->filter()->values();
-    }
 
     protected function container()
     {
@@ -186,78 +161,8 @@ class PinPointImage extends Fieldtype
         throw new UndefinedContainerException;
     }
 
-    public function rules(): array
-    {
-        $rules = ['array'];
-
-        if ($max = $this->config('max_files')) {
-            $rules[] = 'max:'.$max;
-        }
-
-        return $rules;
-    }
-
-    public function fieldRules()
-    {
-        $classes = [
-            'dimensions' => DimensionsRule::class,
-            'image' => ImageRule::class,
-            'max_filesize' => MaxRule::class,
-            'mimes' => MimesRule::class,
-            'mimetypes' => MimetypesRule::class,
-            'min_filesize' => MinRule::class,
-        ];
-
-        return collect(parent::fieldRules())->map(function ($rule) use ($classes) {
-            $name = Str::before($rule, ':');
-
-            if ($class = Arr::get($classes, $name)) {
-                $parameters = explode(',', Str::after($rule, ':'));
-
-                return new $class($parameters);
-            }
-
-            return $rule;
-        })->all();
-    }
-
     public function preProcessIndex($data)
     {
-        if (! $assets = $this->augment($data)) {
-            return [];
-        }
-
-        if ($this->config('max_files') === 1) {
-            $assets = collect([$assets]);
-        }
-
-        return $assets->map(function ($asset) {
-            $arr = [
-                'id' => $asset->id(),
-                'is_image' => $isImage = $asset->isImage(),
-                'extension' => $asset->extension(),
-                'url' => $asset->url(),
-            ];
-
-            if ($isImage) {
-                $arr['thumbnail'] = cp_route('assets.thumbnails.show', [
-                    'encoded_asset' => base64_encode($asset->id()),
-                    'size' => 'thumbnail',
-                ]);
-            }
-
-            return $arr;
-        });
-    }
-
-    public function toGqlType()
-    {
-        $type = GraphQL::type(AssetInterface::NAME);
-
-        if ($this->config('max_files') !== 1) {
-            $type = GraphQL::listOf($type);
-        }
-
-        return $type;
+        return [];
     }
 }
