@@ -1,6 +1,6 @@
 # Pinpoint Image
 
-> Pinpoit image is a Statamic addon that does something pretty neat. Oh yes, thats right, we need to explain that bit.
+> Pinpoint image is a Statamic addon that does something pretty neat. Oh yes, thats right, we need to explain that bit.
 > Right then, It allows you to create your own pinpoint image! 
 > 
 > hmmmm, that still doesnt explain it, does it?
@@ -16,6 +16,13 @@ This addon does:
 - Allows you to add your own pinpoint image (which was wonderfully described above)
 - Edit the outputted field on the frontend
 
+
+## License
+Pinpoint image requires a license to be used while on a production site.
+You can purchase one at https://statamic.com/addons/weareframework/pinpoint-image.
+
+You may use Pinpoint image without a license while developing locally.
+
 ## How to Install
 
 You can search for this addon in the `Tools > Addons` section of the Statamic control panel and click **install**, or run the following command from your project root:
@@ -23,29 +30,6 @@ You can search for this addon in the `Tools > Addons` section of the Statamic co
 ``` bash
 composer require weareframework/pinpoint-image
 ```
-
-### Install locally
-If installing locally then create a local folder to put this in e.g. **addons**, then **weareframework** so full folder path is **addons/weareframework**
-clone this repo in and then update your composer file to make statamic aware of a local file like so:
-
-```
-    ...
- 
-    "require": {
-        ...,
-        "weareframework/pinpoint-image": "*"
-    },
- 
-    ...
-    "repositories": [
-        {
-            "type": "path",
-            "url": "addons/weareframework/pinpoint-image"
-        }
-    ]
-```    
-
-the docs at statamic refer to how to do this also: https://statamic.dev/extending/addons#private-addons
 
 ## How to Use
 
