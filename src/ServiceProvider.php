@@ -5,6 +5,7 @@ namespace Weareframework\PinpointImage;
 use Statamic\Providers\AddonServiceProvider;
 use Weareframework\PinpointImage\Fieldtypes\PinPointImage;
 use Weareframework\PinpointImage\Tags\PinpointImageTag;
+use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -20,8 +21,22 @@ class ServiceProvider extends AddonServiceProvider
         PinPointImage::class,
     ];
 
-    public function bootAddon()
+    public function boot()
     {
-        //
+        parent::boot();
+        Statamic::booted(function () {
+            $this->bootAddonViews();
+        });
+    }
+
+    protected function bootAddonViews(): self
+    {
+        $this->loadViewsFrom(__DIR__.'/../resources/views/tags', 'pinpoint-image');
+
+        $this->publishes([
+            __DIR__.'/../resources/views/tags' => resource_path('views/vendor/pinpoint-image/tags'),
+        ], 'pinpoint-image-views');
+
+        return $this;
     }
 }
