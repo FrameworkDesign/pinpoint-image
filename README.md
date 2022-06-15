@@ -1,11 +1,11 @@
 # Pinpoint Image
 
 > Pinpoint image is a Statamic addon that does something pretty neat. Oh yes, thats right, we need to explain that bit.
-> Right then, It allows you to create your own pinpoint image! 
+> Right then, It allows you to create your own pinpoint image fieldtype! 
 > 
-> hmmmm, that still doesnt explain it, does it?
+> hmmmm, that still does not explain it, does it?
 > 
-> Perhaps an image, people like pictures:
+> Perhaps an image, people like pictures, here is how the fieldtype looks in your cp admin:
 
 ![Alt text](assets/pinpoint-img-cp.png "Optional title")
 
@@ -13,7 +13,10 @@
 
 This addon does:
 
-- Allows you to add your own pinpoint image (which was wonderfully described above)
+- Allows you to add your own pinpoint image fieldtype (which was wonderfully described above)
+- Add an image to the field
+- Pin each point with text on each point
+- Output the field data to the frontend with a handy tag ```{{ pinpoint_image :field="pinpoint_image_field" }}```
 - Edit the outputted field on the frontend
 
 
@@ -33,8 +36,7 @@ composer require weareframework/pinpoint-image
 
 ## How to Use
 
-Install it, use it, let your site abuse it
-
+Install it, use it, let your site have fun with it
 
 This can be used within Antlers using the product_color_swatch tag:
 
