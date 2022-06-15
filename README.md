@@ -70,5 +70,10 @@ If you want to customize the generated html, you can publish the views using
 ```bash
 php artisan vendor:publish
 ```
-
 and choosing `Weareframework\PinpointImage\ServiceProvider`
+
+
+This will create the file template to overwrite at the following path: 
+```statamic-install-site-name/resources/views/vendor/pinpoint-image/tags/index.blade.php```
+
+Hopefully it makes sense for you to edit it!
