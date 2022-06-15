@@ -16,7 +16,7 @@ This addon does:
 - Allows you to add your own pinpoint image fieldtype (which was wonderfully described above)
 - Add an image to the field
 - Pin each point with text on each point
-- Output the field data to the frontend with a handy tag ```{{ pinpoint_image :field="pinpoint_image_field" }}```
+- Output the field data to the frontend with a handy tag ```{{ pinpoint_image :field="pinpoint_image_field" }}``` (:field= is the name of the field handle when you create the field in blueprint)
 - Edit the outputted field on the frontend
 
 
@@ -43,6 +43,7 @@ This can be used within Antlers using the product_color_swatch tag:
 ```twig
 {{ pinpoint_image :field="pinpoint_image_field" }}
 ```
+```:field=``` is the name of the field handle when you create the field in blueprint
 
 by default it outputs this:
 ![Alt text](assets/pinpoint-img-front.png "Optional title")
