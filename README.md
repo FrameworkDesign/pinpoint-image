@@ -34,6 +34,9 @@ You can search for this addon in the `Tools > Addons` section of the Statamic co
 composer require weareframework/pinpoint-image
 ```
 
+## Things to note
+The field utilises the asset field type to grab an image so ensure you've picked a container for the field e.g. assets
+
 ## How to Use
 
 Install it, use it, let your site have fun with it
