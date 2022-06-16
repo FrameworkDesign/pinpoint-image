@@ -101,6 +101,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
@@ -138,6 +141,11 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     }
+  },
+  methods: {
+    remove: function remove() {
+      this.$emit('delete', this.index);
+    }
   }
 });
 
@@ -153,6 +161,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PinPoint_PinAnnotatedItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PinPoint/PinAnnotatedItem */ "./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue");
+//
 //
 //
 //
@@ -238,23 +247,29 @@ __webpack_require__.r(__webpack_exports__);
       return null;
     },
     assetImage: function assetImage() {
-      return [this.fieldValue.image];
+      return this.fieldValue.image === null ? [] : [this.fieldValue.image];
     }
   },
   methods: {
     updateAnnotation: function updateAnnotation(updatedData) {
       this.$set(this.annotations, updatedData.index, updatedData.data);
     },
+    cleanOutImage: function cleanOutImage() {
+      this.image = null;
+      this.fieldValue.image = null;
+      var newMeta = this.refreshObject(this.meta);
+      newMeta.data = [];
+      this.updateMeta(newMeta);
+      this.update([]);
+    },
     updateKey: function updateKey(value) {
       if (value === null) {
-        this.image = null;
-        this.fieldValue.image = null;
+        this.cleanOutImage();
         return;
       }
 
       if (value.length === 0) {
-        this.image = null;
-        this.fieldValue.image = null;
+        this.cleanOutImage();
         return;
       }
 
@@ -347,9 +362,28 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css&":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--5-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.field-type-pinpoint-image .assets-fieldtype-picker {\n    display: flex;\n    align-items: center;\n    padding: 8px 16px;\n    --bg-opacity: 1;\n    background-color: #f5f8fc;\n    background-color: rgba(244.79999999999998,248.11499999999998,252.45,var(--bg-opacity));\n    border-width: 1px;\n    border-radius: 3px;\n}\n.field-type-pinpoint-image .asset-upload-control {\n    margin-left: 16px;\n}\n.field-type-pinpoint-image .upload-text-button {\n    --text-opacity: 1;\n    color: #19a1e6;\n    color: rgba(25.499999999999993,161.49999999999994,229.5,var(--text-opacity));\n    text-decoration: underline;\n    white-space: nowrap;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css&":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--5-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css& ***!
+  !*** ./node_modules/css-loader??ref--5-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css& ***!
   \***************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -453,15 +487,45 @@ function toComment(sourceMap) {
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css&":
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--5-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--5-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--5-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./PinPointImageFieldType.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css&":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--5-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css& ***!
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--5-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css& ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--5-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--5-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css&");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--5-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--5-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -1011,10 +1075,27 @@ var render = function () {
     "div",
     { staticClass: "px-2 py-1 bg-white border-b border-r border-l" },
     [
-      _c("h5", {
-        staticClass: "mb-0",
-        domProps: { textContent: _vm._s("Marker " + (_vm.itemIndex + 1)) },
-      }),
+      _c("div", { staticClass: "flex justify-between" }, [
+        _c("h5", {
+          staticClass: "mb-0",
+          domProps: { textContent: _vm._s("Marker " + (_vm.itemIndex + 1)) },
+        }),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "text-xs",
+            attrs: { href: "#" },
+            on: {
+              click: function ($event) {
+                $event.preventDefault()
+                return _vm.remove.apply(null, arguments)
+              },
+            },
+          },
+          [_vm._v("X")]
+        ),
+      ]),
       _vm._v(" "),
       _c("input", {
         directives: [
@@ -1062,103 +1143,111 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("assets-fieldtype", {
-        attrs: {
-          value: _vm.assetImage,
-          config: _vm.config,
-          meta: _vm.meta,
-          handle: _vm.handle,
-          readOnly: _vm.readOnly,
-        },
-        on: {
-          input: function ($event) {
-            return _vm.updateKey($event)
+  return _c("div", { staticClass: "field-type-pinpoint-image" }, [
+    _c(
+      "div",
+      { staticClass: "assets-fieldtype-picker" },
+      [
+        _c("assets-fieldtype", {
+          attrs: {
+            value: _vm.assetImage,
+            config: _vm.config,
+            meta: _vm.meta,
+            handle: _vm.handle,
+            readOnly: _vm.readOnly,
           },
-        },
-      }),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.hasImage,
-              expression: "hasImage",
+          on: {
+            input: function ($event) {
+              return _vm.updateKey($event)
             },
-          ],
-          staticClass: "flex flex-row parent-wrap",
-        },
-        [
+          },
+        }),
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.hasImage,
+            expression: "hasImage",
+          },
+        ],
+        staticClass: "flex flex-row parent-wrap",
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "w-1/5 pin-annotated-items" },
+          _vm._l(_vm.annotations, function (item, index) {
+            return _vm.annotations.length
+              ? _c(
+                  "div",
+                  { staticClass: "flex flex-row " },
+                  [
+                    _c("pin-annotated-item", {
+                      key: index,
+                      attrs: { item: item, "item-index": index },
+                      on: {
+                        updated: _vm.updateAnnotation,
+                        delete: function ($event) {
+                          return _vm.remove(index)
+                        },
+                      },
+                    }),
+                  ],
+                  1
+                )
+              : _vm._e()
+          }),
+          0
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "w-4/5 pin-point-image-image" }, [
           _c(
             "div",
-            { staticClass: "w-1/5 pin-annotated-items" },
-            _vm._l(_vm.annotations, function (item, index) {
-              return _vm.annotations.length
-                ? _c(
-                    "div",
-                    { staticClass: "flex flex-row " },
-                    [
-                      _c("pin-annotated-item", {
-                        key: index,
-                        attrs: { item: item, "item-index": index },
-                        on: { updated: _vm.updateAnnotation },
-                      }),
-                    ],
-                    1
-                  )
-                : _vm._e()
-            }),
-            0
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "w-4/5 pin-point-image-image" }, [
-            _c(
-              "div",
-              { staticClass: "floorplan-preview relative" },
-              [
-                _c("div", { staticClass: "border-b border-r border-l" }, [
-                  _c("img", {
-                    ref: "floorplan",
-                    attrs: { src: _vm.imageUrl },
-                    on: { click: _vm.getClickedPosition },
-                  }),
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.annotations, function (item, index) {
-                  return _vm.annotations.length
-                    ? _c(
-                        "div",
-                        {
-                          staticClass: "floorplan-annotate",
-                          style: { top: item.y + "%", left: item.x + "%" },
-                          on: {
-                            click: function ($event) {
-                              return _vm.remove(index)
-                            },
+            { staticClass: "floorplan-preview relative" },
+            [
+              _c("div", { staticClass: "border-b border-r border-l" }, [
+                _c("img", {
+                  ref: "floorplan",
+                  attrs: { src: _vm.imageUrl },
+                  on: { click: _vm.getClickedPosition },
+                }),
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.annotations, function (item, index) {
+                return _vm.annotations.length
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "floorplan-annotate",
+                        style: { top: item.y + "%", left: item.x + "%" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.remove(index)
                           },
                         },
-                        [
-                          _c("span", {
-                            domProps: { textContent: _vm._s("" + (index + 1)) },
-                          }),
-                        ]
-                      )
-                    : _vm._e()
-                }),
-              ],
-              2
-            ),
-          ]),
-        ]
-      ),
-    ],
-    1
-  )
+                      },
+                      [
+                        _c("span", {
+                          domProps: { textContent: _vm._s("" + (index + 1)) },
+                        }),
+                      ]
+                    )
+                  : _vm._e()
+              }),
+            ],
+            2
+          ),
+        ]),
+      ]
+    ),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -1359,8 +1448,10 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PinPointImageFieldType_vue_vue_type_template_id_1bd3bfc9_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PinPointImageFieldType.vue?vue&type=template&id=1bd3bfc9&scoped=true& */ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=template&id=1bd3bfc9&scoped=true&");
 /* harmony import */ var _PinPointImageFieldType_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PinPointImageFieldType.vue?vue&type=script&lang=js& */ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _PinPointImageFieldType_vue_vue_type_style_index_0_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css& */ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _PinPointImageFieldType_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PinPointImageFieldType.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _PinPointImageFieldType_vue_vue_type_style_index_1_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css& */ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -1369,7 +1460,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_4__["default"])(
   _PinPointImageFieldType_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _PinPointImageFieldType_vue_vue_type_template_id_1bd3bfc9_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
   _PinPointImageFieldType_vue_vue_type_template_id_1bd3bfc9_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -1401,18 +1492,34 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css&":
+/***/ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css& ***!
+  \********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--5-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--5-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./PinPointImageFieldType.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css&":
 /*!********************************************************************************************************************************!*\
-  !*** ./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css& ***!
+  !*** ./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css& ***!
   \********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--5-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--5-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=0&id=1bd3bfc9&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_0_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_1_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--5-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--5-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPointImageFieldType.vue?vue&type=style&index=1&id=1bd3bfc9&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_1_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_1_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_1_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinPointImageFieldType_vue_vue_type_style_index_1_id_1bd3bfc9_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 
 
 /***/ }),

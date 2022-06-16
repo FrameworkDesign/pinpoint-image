@@ -1,5 +1,5 @@
 # Pinpoint Image
-
+Pinpoint image is a statamic addon that allows users to quickly and easily content manage points on images.
 > Pinpoint image is a Statamic addon that does something pretty neat. Oh yes, thats right, we need to explain that bit.
 > Right then, It allows you to create your own pinpoint image fieldtype! 
 > 

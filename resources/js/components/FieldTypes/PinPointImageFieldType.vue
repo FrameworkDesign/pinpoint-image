@@ -1,18 +1,19 @@
 <template>
-    <div>
-        <assets-fieldtype
-            :value="assetImage"
-            :config="config"
-            :meta="meta"
-            :handle="handle"
-            :readOnly="readOnly"
-            @input="updateKey($event)"
-        ></assets-fieldtype>
-
+    <div class="field-type-pinpoint-image">
+        <div class="assets-fieldtype-picker">
+            <assets-fieldtype
+                :value="assetImage"
+                :config="config"
+                :meta="meta"
+                :handle="handle"
+                :readOnly="readOnly"
+                @input="updateKey($event)"
+            ></assets-fieldtype>
+        </div>
         <div class="flex flex-row parent-wrap" v-show="hasImage">
             <div class="w-1/5 pin-annotated-items">
                 <div class="flex flex-row " v-if="annotations.length" v-for="(item, index) in annotations">
-                    <pin-annotated-item @updated="updateAnnotation" :key="index" :item="item" :item-index="index"></pin-annotated-item>
+                    <pin-annotated-item @updated="updateAnnotation" @delete="remove(index)" :key="index" :item="item" :item-index="index"></pin-annotated-item>
                 </div>
             </div>
             <div class="w-4/5 pin-point-image-image">
@@ -86,25 +87,30 @@ export default {
             return null;
         },
         assetImage() {
-            return [this.fieldValue.image]
+            return (this.fieldValue.image === null) ? [] : [this.fieldValue.image]
         }
     },
     methods: {
         updateAnnotation(updatedData) {
             this.$set(this.annotations, updatedData.index, updatedData.data);
         },
+        cleanOutImage() {
+            this.image = null;
+            this.fieldValue.image = null;
+            let newMeta = this.refreshObject(this.meta);
+            newMeta.data = []
+            this.updateMeta(newMeta)
+            this.update([]);
+        },
         updateKey(value) {
             if (value === null) {
-                this.image = null;
-                this.fieldValue.image = null;
+                this.cleanOutImage()
                 return;
             }
             if (value.length === 0) {
-                this.image = null;
-                this.fieldValue.image = null;
+                this.cleanOutImage()
                 return;
             }
-
             this.getImageAsset(value[0])
         },
 
@@ -202,7 +208,28 @@ export default {
 
 }
 </script>
-
+<style>
+.field-type-pinpoint-image .assets-fieldtype-picker {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    --bg-opacity: 1;
+    background-color: #f5f8fc;
+    background-color: rgba(244.79999999999998,248.11499999999998,252.45,var(--bg-opacity));
+    border-width: 1px;
+    border-radius: 3px;
+}
+.field-type-pinpoint-image .asset-upload-control {
+    margin-left: 16px;
+}
+.field-type-pinpoint-image .upload-text-button {
+    --text-opacity: 1;
+    color: #19a1e6;
+    color: rgba(25.499999999999993,161.49999999999994,229.5,var(--text-opacity));
+    text-decoration: underline;
+    white-space: nowrap;
+}
+</style>
 <style scoped>
 .floorplan-preview {
     max-width: 100%;

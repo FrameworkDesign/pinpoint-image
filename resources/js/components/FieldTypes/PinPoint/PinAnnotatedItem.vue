@@ -1,6 +1,9 @@
 <template>
     <div class="px-2 py-1 bg-white border-b border-r border-l">
-        <h5 v-text="`Marker ${itemIndex + 1}`" class="mb-0"></h5>
+        <div class="flex justify-between">
+            <h5 v-text="`Marker ${itemIndex + 1}`" class="mb-0"></h5>
+            <a href="#" @click.prevent="remove" class="text-xs">X</a>
+        </div>
         <input type="text" v-model="heading" class="input-text">
     </div>
 </template>
@@ -39,6 +42,11 @@ export default {
                     }
                 }
             })
+        }
+    },
+    methods: {
+        remove() {
+            this.$emit('delete', this.index);
         }
     }
 }
