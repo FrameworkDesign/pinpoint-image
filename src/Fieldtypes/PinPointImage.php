@@ -79,13 +79,6 @@ class PinPointImage extends Fieldtype
                 'default' => true,
                 'width' => 50,
             ],
-            'max_files' => [
-                'display' => __('Max Files'),
-                'instructions' => __('statamic::fieldtypes.assets.config.max_files'),
-                'min' => 1,
-                'type' => 'integer',
-                'width' => 50,
-            ],
         ];
     }
 
