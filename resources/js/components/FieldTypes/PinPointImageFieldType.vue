@@ -11,14 +11,35 @@
             ></assets-fieldtype>
         </div>
         <div class="flex flex-row parent-wrap" v-show="hasImage">
-            <div class="w-1/5 pin-annotated-items">
-                <div class="flex flex-row " v-if="annotations.length" v-for="(item, index) in annotations">
-                    <pin-annotated-item @updated="updateAnnotation" @delete="remove(index)" :key="index" :item="item" :item-index="index"></pin-annotated-item>
-                </div>
+            <div class="pin-annotated-items">
+                    <sortable-list
+                        v-model="annotations"
+                        :vertical="true"
+                        item-class="sortable-row"
+                        handle-class="sortable-handle"
+                        @dragstart="$emit('focus')"
+                        @dragend="updateOrder"
+                    >
+                        <div ref="list">
+                            <div
+                                v-for="(annotation, index) in annotations"
+                                :key="index"
+                                class="flex flex-row sortable-row items-stretch justify-stretch"
+                            >
+                                <span class="pinpoint-drag-handle sortable-handle"></span>
+                                <pin-annotated-item
+                                    @updated="updateAnnotation"
+                                    @delete="remove(index)"
+                                    :item="annotation"
+                                    :item-index="index"
+                                ></pin-annotated-item>
+                            </div>
+                        </div>
+                    </sortable-list>
             </div>
-            <div class="w-4/5 pin-point-image-image">
+            <div class="pin-point-image-image">
 
-                <div class="floorplan-preview relative" >
+                <div class="pinpoint-preview relative" >
                     <div class="border-b border-r border-l">
                         <img :src="imageUrl" ref="floorplan" @click="getClickedPosition">
                     </div>
@@ -26,8 +47,9 @@
                         v-if="annotations.length"
                         v-for="(item, index) in annotations"
                         :style="{ top: item.y + '%', left: item.x + '%' }"
-                        class="floorplan-annotate"
-                        @click="remove(index)"
+                        class="pinpoint-annotate"
+                        draggable="true"
+                        @dragend="dragEnd($event, item, index)"
                     >
                         <span v-text="`${index + 1}`"></span>
                     </div>
@@ -37,16 +59,16 @@
         </div>
     </div>
 </template>
-
 <script>
 import PinAnnotatedItem from "./PinPoint/PinAnnotatedItem";
+import { SortableList, SortableItem, SortableHelpers } from './../../sortable/Sortable';
 export default {
-
     components: {
-        PinAnnotatedItem
+        PinAnnotatedItem,
+        SortableList,
+        SortableItem
     },
-
-    mixins: [Fieldtype],
+    mixins: [Fieldtype, SortableHelpers],
 
     mounted() {
         if (this.value !== null && this.value.image && this.value.image.length > 0) {
@@ -60,6 +82,7 @@ export default {
 
     data() {
         return {
+            drag: false,
             fieldValue: this.value || { "image": {}, "annotations": []},
             hasImage: false,
             containerWidth: null,
@@ -91,13 +114,17 @@ export default {
         }
     },
     methods: {
+        reorderItems() {
+            console.log('reorderItems end')
+            this.drag = false
+        },
         updateAnnotation(updatedData) {
             this.$set(this.annotations, updatedData.index, updatedData.data);
         },
         cleanOutImage() {
             this.image = null;
             this.fieldValue.image = null;
-            let newMeta = this.refreshObject(this.meta);
+            let newMeta = this.cleanObject(this.meta);
             newMeta.data = []
             this.updateMeta(newMeta)
             this.update([]);
@@ -137,6 +164,18 @@ export default {
         },
 
         getClickedPosition(e) {
+            let xy = this.getXyPosition(e)
+            this.annotations.push({
+                x: xy.x,
+                y: xy.y,
+                data: {
+                    heading: ''
+                }
+            })
+            this.fieldValue.annotations = this.annotations;
+        },
+
+        getXyPosition(e) {
             const position = this.getPosition(e.currentTarget)
             const xPosition = e.clientX - position.x - 40 / 2
             const yPosition = e.clientY - position.y - 40 / 2
@@ -148,14 +187,10 @@ export default {
             let x = this.roundUp((xPosition / width) * 100, 0)
             let y = this.roundUp((yPosition / height) * 100, 0)
 
-            this.annotations.push({
-                x: x,
-                y: y,
-                data: {
-                    heading: ''
-                }
-            })
-            this.fieldValue.annotations = this.annotations;
+            return {
+                x,
+                y
+            }
         },
 
         getPosition(el) {
@@ -186,11 +221,20 @@ export default {
         },
 
         remove(index) {
-            if (confirm('Are you sure you want to delete item?')) {
-                this.annotations.splice(index, 1)
-                this.fieldValue.annotations = this.annotations;
-            }
+            this.annotations.splice(index, 1)
+            this.fieldValue.annotations = this.annotations;
         },
+
+        dragEnd($event, item, index) {
+            let xy = this.getXyPosition($event)
+
+            this.annotations[index].x = (item.x + xy.x)
+            this.annotations[index].y = (item.y + xy.y)
+        },
+
+        updateOrder: _.debounce(function() {
+            this.fieldValue.annotations = this.annotations
+        }, 500),
 
         roundUp(num, precision) {
             precision = Math.pow(10, precision)
@@ -201,7 +245,7 @@ export default {
             return value === null
         },
 
-        refreshObject(obj) {
+        cleanObject(obj) {
             return JSON.parse(JSON.stringify(obj))
         }
     }
@@ -231,18 +275,18 @@ export default {
 }
 </style>
 <style scoped>
-.floorplan-preview {
+.pinpoint-preview {
     max-width: 100%;
     position: relative;
     cursor: crosshair;
 }
 
-.floorplan-preview img {
+.pinpoint-preview img {
     width: 100%;
     height: auto;
 }
 
-.floorplan-annotate {
+.pinpoint-annotate {
     position: absolute;
     border-radius: 50% 50% 0;
     transform: rotate(45deg);
@@ -268,8 +312,26 @@ export default {
      }
 }
 
-.floorplan-annotate span {
+.pin-annotated-items {
+    width: 15%;
+}
+.pin-point-image-image {
+    width: 85%;
+}
+
+.pinpoint-annotate span {
     display: block;
     transform: rotate(-45deg);
+}
+
+.pinpoint-drag-handle {
+    width: 20px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    height: auto;
+    padding: 8px;
+    cursor: -webkit-grab;
+    cursor: grab;
+    background: #f5f8fc url('/vendor/pinpoint-image/img/drag-dots.svg') 50% no-repeat;
 }
 </style>
