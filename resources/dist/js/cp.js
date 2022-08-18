@@ -7150,6 +7150,63 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
@@ -7159,7 +7216,8 @@ __webpack_require__.r(__webpack_exports__);
           x: 0,
           y: 0,
           data: {
-            heading: ''
+            heading: '',
+            fields: []
           }
         };
       }
@@ -7171,28 +7229,54 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      isSelectingNewFieldtype: false,
       modalOpen: false,
-      heading: this.item.data.heading
+      heading: this.item.data.heading,
+      fields: this.item.data.fields,
+      fieldtypes: [// { icon:"bard", text:"Bard", value:"bard", content:'' },
+      // { icon:"html", text:"html", value:"html", content:'' },
+      {
+        icon: "markdown",
+        text: "Markdown",
+        value: "markdown",
+        content: ''
+      }, {
+        icon: "text",
+        text: "Text",
+        value: "text",
+        content: ''
+      }, {
+        icon: "textarea",
+        text: "Textarea",
+        value: "textarea",
+        content: ''
+      }]
     };
   },
-  watch: {
-    heading: function heading(newValue) {
-      this.$emit('updated', {
-        index: this.itemIndex,
-        data: {
-          x: this.item.x,
-          y: this.item.y,
-          data: {
-            heading: newValue
-          }
-        }
-      });
+  computed: {
+    hasFields: function hasFields() {
+      return this.item.data.fields !== undefined && this.item.data.fields.length > 0;
     }
   },
   methods: {
+    select: function select(fieldType) {
+      if (this.item.data.fields === undefined) {
+        this.item.data.fields = [];
+      }
+
+      this.item.data.fields.push(this.cleanObject(fieldType));
+      this.isSelectingNewFieldtype = false;
+    },
+    updateFieldContent: function updateFieldContent($event, field, fIndex) {
+      field.content = $event;
+    },
     edit: function edit() {
       this.modalOpen = true;
-      console.log('edit me', this.cleanObject(this.item), this.itemIndex);
+    },
+    removeField: function removeField(field, fIndex) {
+      this.item.data.fields = this.item.data.fields.filter(function (item) {
+        return item.content !== field.content;
+      });
     },
     remove: function remove() {
       if (confirm('Are you sure?')) {
@@ -7218,7 +7302,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PinPoint_PinAnnotatedItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PinPoint/PinAnnotatedItem */ "./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue");
 /* harmony import */ var _sortable_Sortable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../sortable/Sortable */ "./resources/js/sortable/Sortable.js");
-//
 //
 //
 //
@@ -7334,7 +7417,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     reorderItems: function reorderItems() {
-      console.log('reorderItems end');
       this.drag = false;
     },
     updateAnnotation: function updateAnnotation(updatedData) {
@@ -7390,7 +7472,8 @@ __webpack_require__.r(__webpack_exports__);
         x: xy.x,
         y: xy.y,
         data: {
-          heading: ''
+          heading: '',
+          fields: []
         }
       });
       this.fieldValue.annotations = this.annotations;
@@ -8577,7 +8660,7 @@ var render = function () {
         _vm._v(" "),
         _c("h6", {
           staticStyle: { "font-size": "10px" },
-          domProps: { textContent: _vm._s(_vm.heading) },
+          domProps: { textContent: _vm._s(_vm.item.data.heading) },
         }),
         _vm._v(" "),
         _c("div", { staticClass: "flex justify-between w-full--" }, [
@@ -8653,28 +8736,6 @@ var render = function () {
             },
             [
               _c("div", { staticClass: "p-3 relative" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.heading,
-                      expression: "heading",
-                    },
-                  ],
-                  staticClass: "input-text",
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.heading },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.heading = $event.target.value
-                    },
-                  },
-                }),
-                _vm._v(" "),
                 _c("button", {
                   staticClass: "btn-close absolute top-0 right-0 mt-2 mr-2",
                   attrs: { "aria-label": _vm.__("Close") },
@@ -8685,6 +8746,229 @@ var render = function () {
                     },
                   },
                 }),
+                _vm._v(" "),
+                _c("div", { staticClass: "content mt-0 mb-2" }, [
+                  _c("h2", [_vm._v("Content")]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "max-w-lg" }, [
+                    _vm._v("Edit your pinpoints content here:"),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("label", { staticClass: "text-base font-bold mb-1" }, [
+                    _vm._v("Heading"),
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.item.data.heading,
+                        expression: "item.data.heading",
+                      },
+                    ],
+                    staticClass: "input-text mb-2",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.item.data.heading },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.item.data, "heading", $event.target.value)
+                      },
+                    },
+                  }),
+                  _vm._v(" "),
+                  _vm.hasFields
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "label",
+                            { staticClass: "text-base font-bold mb-1" },
+                            [_vm._v("Fields")]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(
+                            _vm.item.data.fields,
+                            function (field, fIndex) {
+                              return _c(
+                                "div",
+                                { key: fIndex, staticClass: "w-full pb-4" },
+                                [
+                                  _c(field.value + "-fieldtype", {
+                                    tag: "component",
+                                    attrs: {
+                                      value: field.content,
+                                      handle: field.value + "_field",
+                                      "name-prefix": "",
+                                      "error-key-prefix": "",
+                                      "read-only": false,
+                                      "deed-eded": "$emit('input', $event)",
+                                    },
+                                    on: {
+                                      "update:value": function ($event) {
+                                        return _vm.$set(
+                                          field,
+                                          "content",
+                                          $event
+                                        )
+                                      },
+                                      input: function ($event) {
+                                        return _vm.updateFieldContent(
+                                          $event,
+                                          field,
+                                          fIndex
+                                        )
+                                      },
+                                      "meta-updated": function ($event) {
+                                        return _vm.$emit("meta-updated", $event)
+                                      },
+                                      focus: _vm.focused,
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "flex justify-end mt-1" },
+                                    [
+                                      _c(
+                                        "a",
+                                        {
+                                          directives: [
+                                            {
+                                              name: "tooltip",
+                                              rawName: "v-tooltip",
+                                              value: "Delete field",
+                                              expression: "'Delete field'",
+                                            },
+                                          ],
+                                          staticClass: "text-xs",
+                                          attrs: { href: "#" },
+                                          on: {
+                                            click: function ($event) {
+                                              $event.preventDefault()
+                                              return _vm.removeField(
+                                                field,
+                                                fIndex
+                                              )
+                                            },
+                                          },
+                                        },
+                                        [
+                                          _c("svg-icon", {
+                                            staticClass: "w-4 h-4",
+                                            attrs: { name: "trash" },
+                                          }),
+                                        ],
+                                        1
+                                      ),
+                                    ]
+                                  ),
+                                ],
+                                1
+                              )
+                            }
+                          ),
+                        ],
+                        2
+                      )
+                    : _vm._e(),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mt-5" }, [
+                  _vm.isSelectingNewFieldtype
+                    ? _c("div", [
+                        _c("div", { staticClass: "fieldtype-selector" }, [
+                          _c(
+                            "div",
+                            { staticClass: "fieldtype-list" },
+                            _vm._l(
+                              _vm.fieldtypes,
+                              function (fieldtype, findex) {
+                                return _c(
+                                  "div",
+                                  { key: findex, staticClass: "p-1" },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "bg-white border border-grey-50 flex items-center group w-full rounded hover:border-grey-60 shadow-sm hover:shadow-md pr-1.5",
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.select(fieldtype)
+                                          },
+                                        },
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "p-1 flex items-center border-r border-grey-50 group-hover:border-grey-60 bg-grey-20 rounded-l",
+                                          },
+                                          [
+                                            _c("svg-icon", {
+                                              staticClass:
+                                                "h-5 w-5 text-grey-80",
+                                              attrs: {
+                                                name: fieldtype.icon,
+                                                default: "generic-field",
+                                              },
+                                            }),
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "pl-1.5 text-grey-80 text-md group-hover:text-grey-90",
+                                          },
+                                          [_vm._v(_vm._s(fieldtype.text))]
+                                        ),
+                                      ]
+                                    ),
+                                  ]
+                                )
+                              }
+                            ),
+                            0
+                          ),
+                        ]),
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "btn w-auto ml-auto flex justify-center items-center",
+                      on: {
+                        click: function ($event) {
+                          _vm.isSelectingNewFieldtype = true
+                        },
+                      },
+                    },
+                    [
+                      _c("svg-icon", {
+                        staticClass: "mr-1 w-4 h-4",
+                        attrs: { name: "wireframe" },
+                      }),
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.__("Add Field")) +
+                          "\n                "
+                      ),
+                    ],
+                    1
+                  ),
+                ]),
               ]),
             ]
           )
@@ -8798,9 +9082,11 @@ var render = function () {
                         _c("pin-annotated-item", {
                           attrs: { item: annotation, "item-index": index },
                           on: {
-                            updated: _vm.updateAnnotation,
                             delete: function ($event) {
                               return _vm.remove(index)
+                            },
+                            "update:item": function ($event) {
+                              annotation = $event
                             },
                           },
                         }),

@@ -28,9 +28,8 @@
                             >
                                 <span class="pinpoint-drag-handle sortable-handle"></span>
                                 <pin-annotated-item
-                                    @updated="updateAnnotation"
                                     @delete="remove(index)"
-                                    :item="annotation"
+                                    :item.sync="annotation"
                                     :item-index="index"
                                 ></pin-annotated-item>
                             </div>
@@ -99,7 +98,7 @@ export default {
             handler (data) {
                 this.updateDebounced(data);
             }
-        },
+        }
     },
 
     computed: {
@@ -115,7 +114,6 @@ export default {
     },
     methods: {
         reorderItems() {
-            console.log('reorderItems end')
             this.drag = false
         },
         updateAnnotation(updatedData) {
@@ -169,8 +167,9 @@ export default {
                 x: xy.x,
                 y: xy.y,
                 data: {
-                    heading: ''
-                }
+                    heading: '',
+                    fields: []
+                },
             })
             this.fieldValue.annotations = this.annotations;
         },
