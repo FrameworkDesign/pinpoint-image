@@ -77,3 +77,13 @@ This will create the file template to overwrite at the following path:
 ```statamic-install-site-name/resources/views/vendor/pinpoint-image/tags/index.blade.php```
 
 Hopefully it makes sense for you to edit it!
+
+
+### Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
+
+## Security
+
+If you discover any security related issues, please use the issue tracker.
