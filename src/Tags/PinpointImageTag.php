@@ -3,7 +3,9 @@
 namespace Weareframework\PinpointImage\Tags;
 
 use Statamic\Facades\Asset;
-use Statamic\Http\Resources\CP\Assets\Asset as AssetResource;
+//use Statamic\Http\Resources\CP\Assets\Asset as AssetResource;
+
+use Statamic\Http\Resources\API\AssetResource;
 use Statamic\Support\Str;
 use Statamic\Tags\Tags;
 
