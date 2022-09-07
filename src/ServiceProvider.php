@@ -2,8 +2,10 @@
 
 namespace Weareframework\PinpointImage;
 
+use Statamic\Facades\GraphQL;
 use Statamic\Providers\AddonServiceProvider;
 use Weareframework\PinpointImage\Fieldtypes\PinPointImage;
+use Weareframework\PinpointImage\GraphQL\PinPointImageFieldType;
 use Weareframework\PinpointImage\Tags\PinpointImageTag;
 use Statamic\Statamic;
 
@@ -24,9 +26,12 @@ class ServiceProvider extends AddonServiceProvider
     public function boot()
     {
         parent::boot();
+
         Statamic::booted(function () {
             $this->bootAddonViews();
         });
+
+        $this->bootGraphQL();
     }
 
     protected function bootAddonViews(): self
@@ -36,6 +41,13 @@ class ServiceProvider extends AddonServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views/tags' => resource_path('views/vendor/pinpoint-image/tags'),
         ], 'pinpoint-image-views');
+
+        return $this;
+    }
+
+    private function bootGraphQL(): self
+    {
+        GraphQL::addType(PinPointImageFieldType::class);
 
         return $this;
     }

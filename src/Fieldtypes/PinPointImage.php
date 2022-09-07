@@ -20,6 +20,8 @@ use Statamic\GraphQL\Types\AssetInterface;
 use Statamic\Http\Resources\CP\Assets\Asset as AssetResource;
 use Statamic\Support\Arr;
 use Statamic\Support\Str;
+use Weareframework\PinpointImage\GraphQL\PinPointImageFieldType;
+use Statamic\GraphQL\Types\ArrayType;
 
 class PinPointImage extends Fieldtype
 {
@@ -106,7 +108,7 @@ class PinPointImage extends Fieldtype
 
     protected function fields()
     {
-        return new BlueprintFields($this->fieldConfig());
+        return new BlueprintFields($this->configFieldItems());
     }
 
     public function preload()
@@ -158,4 +160,10 @@ class PinPointImage extends Fieldtype
     {
         return [];
     }
+
+    public function toGqlType()
+    {
+        return GraphQL::type(PinPointImageFieldType::NAME);
+    }
+
 }
