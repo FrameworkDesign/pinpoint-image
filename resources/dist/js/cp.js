@@ -7207,6 +7207,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
@@ -7362,6 +7368,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7372,18 +7389,26 @@ __webpack_require__.r(__webpack_exports__);
   },
   mixins: [Fieldtype, _sortable_Sortable__WEBPACK_IMPORTED_MODULE_1__["SortableHelpers"]],
   mounted: function mounted() {
-    if (this.value !== null && this.value.image && this.value.image.length > 0) {
-      this.getImageAsset(this.value.image);
+    if (this.config.max_files === undefined) {
+      this.config.max_files = 1;
     }
 
-    if (this.value !== null && this.value.annotations && this.value.annotations.length > 0) {
-      this.annotations = this.value.annotations;
+    if (this.value !== null && this.value.image && this.value.annotations) {
+      this.fieldValue = this.value;
+
+      if (this.value.image !== null) {
+        this.getImageAsset(this.value.image);
+      }
+
+      if (this.value.annotations.length > 0) {
+        this.annotations = this.meta.data.annotations;
+      }
     }
   },
   data: function data() {
     return {
       drag: false,
-      fieldValue: this.value || {
+      fieldValue: {
         "image": {},
         "annotations": []
       },
@@ -7421,6 +7446,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateAnnotation: function updateAnnotation(updatedData) {
       this.$set(this.annotations, updatedData.index, updatedData.data);
+    },
+    clearImage: function clearImage() {
+      if (!confirm('Are you sure?')) {
+        return;
+      }
+
+      this.cleanOutImage();
+    },
+    clearAnnotations: function clearAnnotations() {
+      if (!confirm('Are you sure?')) {
+        return;
+      }
+
+      this.$set(this, 'annotations', []);
     },
     cleanOutImage: function cleanOutImage() {
       this.image = null;
@@ -8659,6 +8698,7 @@ var render = function () {
         }),
         _vm._v(" "),
         _c("h6", {
+          staticClass: "break-all",
           staticStyle: { "font-size": "10px" },
           domProps: { textContent: _vm._s(_vm.item.data.heading) },
         }),
@@ -8944,30 +8984,52 @@ var render = function () {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "btn w-auto ml-auto flex justify-center items-center",
-                      on: {
-                        click: function ($event) {
-                          _vm.isSelectingNewFieldtype = true
+                  _c("div", { staticClass: "flex flex-row justify-between" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn w-auto flex justify-center items-center",
+                        on: {
+                          click: function ($event) {
+                            _vm.isSelectingNewFieldtype = true
+                          },
                         },
                       },
-                    },
-                    [
-                      _c("svg-icon", {
-                        staticClass: "mr-1 w-4 h-4",
-                        attrs: { name: "wireframe" },
-                      }),
-                      _vm._v(
-                        "\n                    " +
-                          _vm._s(_vm.__("Add Field")) +
-                          "\n                "
-                      ),
-                    ],
-                    1
-                  ),
+                      [
+                        _c("svg-icon", {
+                          staticClass: "mr-1 w-4 h-4",
+                          attrs: { name: "wireframe" },
+                        }),
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.__("Add Field")) +
+                            "\n                    "
+                        ),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn-primary w-auto ml-auto flex justify-center items-center",
+                        on: {
+                          click: function ($event) {
+                            _vm.modalOpen = false
+                          },
+                        },
+                      },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.__("Close")) +
+                            "\n                    "
+                        ),
+                      ]
+                    ),
+                  ]),
                 ]),
               ]),
             ]
@@ -9000,6 +9062,46 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "field-type-pinpoint-image" }, [
+    _c("div", { staticClass: "pinpoint-image-global-actions mb-1" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn mr-1",
+          on: {
+            click: function ($event) {
+              $event.preventDefault()
+              return _vm.clearAnnotations.apply(null, arguments)
+            },
+          },
+        },
+        [
+          _vm._v(
+            "\n            " +
+              _vm._s(_vm.__("Clear Annotations")) +
+              "\n        "
+          ),
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn mr-1",
+          on: {
+            click: function ($event) {
+              $event.preventDefault()
+              return _vm.clearImage.apply(null, arguments)
+            },
+          },
+        },
+        [
+          _vm._v(
+            "\n            " + _vm._s(_vm.__("Clear Image")) + "\n        "
+          ),
+        ]
+      ),
+    ]),
+    _vm._v(" "),
     _c(
       "div",
       { staticClass: "assets-fieldtype-picker" },
@@ -9449,7 +9551,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_FieldTypes_PinPointImageFieldType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/FieldTypes/PinPointImageFieldType */ "./resources/js/components/FieldTypes/PinPointImageFieldType.vue");
 
-Statamic.$components.register("pin_point_image-fieldtype", _components_FieldTypes_PinPointImageFieldType__WEBPACK_IMPORTED_MODULE_0__["default"]);
+Statamic.booting(function () {
+  Statamic.$components.register("pin_point_image-fieldtype", _components_FieldTypes_PinPointImageFieldType__WEBPACK_IMPORTED_MODULE_0__["default"]);
+});
 
 /***/ }),
 

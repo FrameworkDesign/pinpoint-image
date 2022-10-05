@@ -1,5 +1,16 @@
 <template>
     <div class="field-type-pinpoint-image">
+        <div class="pinpoint-image-global-actions mb-1">
+
+            <button class="btn mr-1" @click.prevent="clearAnnotations">
+                {{ __('Clear Annotations') }}
+            </button>
+
+            <button class="btn mr-1" @click.prevent="clearImage">
+                {{ __('Clear Image') }}
+            </button>
+        </div>
+
         <div class="assets-fieldtype-picker">
             <assets-fieldtype
                 :value="assetImage"
@@ -67,22 +78,32 @@ export default {
         SortableList,
         SortableItem
     },
+
     mixins: [Fieldtype, SortableHelpers],
 
     mounted() {
-        if (this.value !== null && this.value.image && this.value.image.length > 0) {
-           this.getImageAsset(this.value.image)
+
+        if (this.config.max_files === undefined) {
+            this.config.max_files = 1
         }
 
-        if (this.value !== null && this.value.annotations && this.value.annotations.length > 0) {
-            this.annotations = this.value.annotations
+        if (this.value !== null && this.value.image && this.value.annotations) {
+            this.fieldValue = this.value
+            if (this.value.image !== null) {
+                this.getImageAsset(this.value.image)
+            }
+
+            if (this.value.annotations.length > 0) {
+                this.annotations = this.meta.data.annotations
+            }
         }
+
     },
 
     data() {
         return {
             drag: false,
-            fieldValue: this.value || { "image": {}, "annotations": []},
+            fieldValue: { "image": {}, "annotations": []},
             hasImage: false,
             containerWidth: null,
             image: [],
@@ -118,6 +139,18 @@ export default {
         },
         updateAnnotation(updatedData) {
             this.$set(this.annotations, updatedData.index, updatedData.data);
+        },
+        clearImage() {
+            if (! confirm('Are you sure?')) {
+                return
+            }
+            this.cleanOutImage()
+        },
+        clearAnnotations() {
+            if (! confirm('Are you sure?')) {
+                return
+            }
+            this.$set(this, 'annotations', [])
         },
         cleanOutImage() {
             this.image = null;

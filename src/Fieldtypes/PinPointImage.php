@@ -122,20 +122,7 @@ class PinPointImage extends Fieldtype
 
     public function getItemData($items)
     {
-        if (! isset($items['image'])) {
-            return null;
-        }
-
-        if (empty($items['image'])) {
-            return collect($items)->values();
-        }
-        $items['image'] = collect($items['image'])->map(function ($url) {
-            return ($asset = Asset::find($url))
-                ? (new AssetResource($asset))->resolve()
-                : null;
-        })->filter()->values();
-
-        return $items['image'];
+        return $items;
     }
 
 

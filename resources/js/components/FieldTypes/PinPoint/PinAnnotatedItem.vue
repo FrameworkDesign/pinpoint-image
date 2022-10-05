@@ -2,7 +2,7 @@
     <div class="px-1 py-1 bg-white border-b border-r border-l flex-1">
         <div class="flex flex-col ">
             <h5 v-text="`Point ${itemIndex + 1}`" class="text-xs mb-0"></h5>
-            <h6 v-text="item.data.heading" style="font-size:10px;"></h6>
+            <h6 v-text="item.data.heading" class="break-all" style="font-size:10px;"></h6>
             <div class="flex justify-between w-full--">
                 <a href="#" @click.prevent="edit" class="text-xs" v-tooltip="'Edit Point Data'">
                     <svg-icon name="form" class="w-4 h-4" />
@@ -77,10 +77,16 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn w-auto ml-auto flex justify-center items-center" @click="isSelectingNewFieldtype = true;">
-                        <svg-icon name="wireframe" class="mr-1 w-4 h-4" />
-                        {{ __('Add Field') }}
-                    </button>
+
+                    <div class="flex flex-row justify-between">
+                        <button class="btn w-auto flex justify-center items-center" @click="isSelectingNewFieldtype = true;">
+                            <svg-icon name="wireframe" class="mr-1 w-4 h-4" />
+                            {{ __('Add Field') }}
+                        </button>
+                        <button class="btn-primary w-auto ml-auto flex justify-center items-center" @click="modalOpen = false">
+                            {{ __('Close') }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </modal>
@@ -116,7 +122,7 @@ export default {
                 // { icon:"html", text:"html", value:"html", content:'' },
                 { icon:"markdown", text:"Markdown", value:"markdown", content:'' },
                 { icon:"text", text:"Text", value:"text", content:'' },
-                { icon:"textarea", text:"Textarea", value:"textarea", content:'' },
+                { icon:"textarea", text:"Textarea", value:"textarea", content:'' }
             ]
         }
     },
