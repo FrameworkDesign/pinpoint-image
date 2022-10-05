@@ -7379,6 +7379,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7401,7 +7409,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.value.annotations.length > 0) {
-        this.annotations = this.meta.data.annotations;
+        this.annotations = this.value.annotations;
       }
     }
   },
@@ -7438,6 +7446,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     assetImage: function assetImage() {
       return this.fieldValue.image === null ? [] : [this.fieldValue.image];
+    },
+    hasAnnotations: function hasAnnotations() {
+      return this.annotations.length > 0;
     }
   },
   methods: {
@@ -9062,45 +9073,53 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "field-type-pinpoint-image" }, [
-    _c("div", { staticClass: "pinpoint-image-global-actions mb-1" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn mr-1",
-          on: {
-            click: function ($event) {
-              $event.preventDefault()
-              return _vm.clearAnnotations.apply(null, arguments)
-            },
-          },
-        },
-        [
-          _vm._v(
-            "\n            " +
-              _vm._s(_vm.__("Clear Annotations")) +
-              "\n        "
-          ),
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn mr-1",
-          on: {
-            click: function ($event) {
-              $event.preventDefault()
-              return _vm.clearImage.apply(null, arguments)
-            },
-          },
-        },
-        [
-          _vm._v(
-            "\n            " + _vm._s(_vm.__("Clear Image")) + "\n        "
-          ),
-        ]
-      ),
-    ]),
+    _vm.hasImage || _vm.hasAnnotations
+      ? _c("div", { staticClass: "pinpoint-image-global-actions mb-1" }, [
+          _vm.hasAnnotations
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn mr-1",
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
+                      return _vm.clearAnnotations.apply(null, arguments)
+                    },
+                  },
+                },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.__("Clear Annotations")) +
+                      "\n        "
+                  ),
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.hasImage
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn mr-1",
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
+                      return _vm.clearImage.apply(null, arguments)
+                    },
+                  },
+                },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.__("Clear Image")) +
+                      "\n        "
+                  ),
+                ]
+              )
+            : _vm._e(),
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _c(
       "div",

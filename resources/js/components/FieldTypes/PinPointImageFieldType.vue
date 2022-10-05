@@ -1,12 +1,20 @@
 <template>
     <div class="field-type-pinpoint-image">
-        <div class="pinpoint-image-global-actions mb-1">
+        <div class="pinpoint-image-global-actions mb-1" v-if="hasImage || hasAnnotations">
 
-            <button class="btn mr-1" @click.prevent="clearAnnotations">
+            <button
+                class="btn mr-1"
+                v-if="hasAnnotations"
+                @click.prevent="clearAnnotations"
+            >
                 {{ __('Clear Annotations') }}
             </button>
 
-            <button class="btn mr-1" @click.prevent="clearImage">
+            <button
+                class="btn mr-1"
+                v-if="hasImage"
+                @click.prevent="clearImage"
+            >
                 {{ __('Clear Image') }}
             </button>
         </div>
@@ -94,7 +102,7 @@ export default {
             }
 
             if (this.value.annotations.length > 0) {
-                this.annotations = this.meta.data.annotations
+                this.annotations = this.value.annotations
             }
         }
 
@@ -131,6 +139,9 @@ export default {
         },
         assetImage() {
             return (this.fieldValue.image === null) ? [] : [this.fieldValue.image]
+        },
+        hasAnnotations() {
+            return this.annotations.length > 0
         }
     },
     methods: {

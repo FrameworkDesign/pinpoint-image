@@ -27,7 +27,7 @@ class PinPointImage extends Fieldtype
 {
     protected $categories = ['media', 'relationship'];
     protected $defaultValue = [
-        'image' => null,
+        'image' => '',
         'annotations' => []
     ];
     protected $selectableInForms = true;
