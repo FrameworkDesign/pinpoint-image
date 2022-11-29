@@ -7372,6 +7372,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   mixins: [Fieldtype, _sortable_Sortable__WEBPACK_IMPORTED_MODULE_1__["SortableHelpers"]],
   mounted: function mounted() {
+    console.log('pin point the image', this.value, 'test');
+
     if (this.value !== null && this.value.image && this.value.image.length > 0) {
       this.getImageAsset(this.value.image);
     }
@@ -9728,7 +9730,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/framework000/CodeValet/fwk-statamic-test/addons/weareframework/pinpoint-image/resources/js/cp.js */"./resources/js/cp.js");
+module.exports = __webpack_require__(/*! /Users/framework000/CodeValet/statamic-fwk/addons/weareframework/pinpoint-image/resources/js/cp.js */"./resources/js/cp.js");
 
 
 /***/ })

@@ -70,6 +70,7 @@ export default {
     mixins: [Fieldtype, SortableHelpers],
 
     mounted() {
+        console.log('pin point the image', this.value, 'test')
         if (this.value !== null && this.value.image && this.value.image.length > 0) {
            this.getImageAsset(this.value.image)
         }
