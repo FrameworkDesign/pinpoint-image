@@ -27,7 +27,7 @@ class PinPointImage extends Fieldtype
 {
     protected $categories = ['media', 'relationship'];
     protected $defaultValue = [
-        'image' => null,
+        'image' => '',
         'annotations' => []
     ];
     protected $selectableInForms = true;
@@ -122,20 +122,7 @@ class PinPointImage extends Fieldtype
 
     public function getItemData($items)
     {
-        if (! isset($items['image'])) {
-            return null;
-        }
-
-        if (empty($items['image'])) {
-            return collect($items)->values();
-        }
-        $items['image'] = collect($items['image'])->map(function ($url) {
-            return ($asset = Asset::find($url))
-                ? (new AssetResource($asset))->resolve()
-                : null;
-        })->filter()->values();
-
-        return $items['image'];
+        return $items;
     }
 
 
