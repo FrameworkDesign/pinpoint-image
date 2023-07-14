@@ -20,11 +20,12 @@
     <div class="assets-fieldtype-picker">
       <assets-fieldtype
         :value="assetImage"
+        ref="assets"
+        handle="assets"
         :config="config"
         :meta="meta"
-        :handle="handle"
         :readOnly="readOnly"
-        @input="updateKey($event)"
+        @input="updateKey"
       ></assets-fieldtype>
     </div>
     <div class="flex flex-row parent-wrap" v-show="hasImage">
@@ -94,6 +95,8 @@ export default {
       this.config.max_files = 1;
     }
 
+    console.log(this.value)
+
     if (this.value !== null && this.value.image && this.value.annotations) {
       this.fieldValue = this.value;
       if (this.value.image !== null) {
@@ -109,7 +112,7 @@ export default {
   data() {
     return {
       drag: false,
-      fieldValue: { image: {}, annotations: [] },
+      fieldValue: { image: null, annotations: [] },
       hasImage: false,
       containerWidth: null,
       image: [],
@@ -138,7 +141,7 @@ export default {
       ) {
         return this.image.data[0].thumbnail;
       }
-      return null;
+      return false;
     },
     assetImage() {
       return this.fieldValue.image === null ? [] : [this.fieldValue.image];
@@ -174,25 +177,26 @@ export default {
       this.updateMeta(newMeta);
       this.update([]);
     },
-    updateKey(value) {
-      if (value === null) {
+    updateKey(assets) {
+      if (assets === null) {
         this.cleanOutImage();
         return;
       }
-      if (value.length === 0) {
+      if (assets.length === 0) {
         this.cleanOutImage();
         return;
       }
-      this.getImageAsset(value[0]);
+      this.getImageAsset(assets[0]);
     },
 
     getImageAsset(value) {
       this.loading = true;
       this.$axios
-        .get(this.cpUrl("assets-fieldtype"), {
-          params: { assets: value },
+        .post(this.cpUrl("assets-fieldtype"), {
+            assets:[ value ],
         })
         .then((response) => {
+            console.log(response)
           this.image = {
             container: "assets",
             data: response.data,
@@ -314,6 +318,12 @@ export default {
   );
   border-width: 1px;
   border-radius: 3px;
+  min-width: 360px;
+    font-size: 12px;
+}
+
+.field-type-pinpoint-image .asset-table-listing {
+    display: none;
 }
 .field-type-pinpoint-image .asset-upload-control {
   margin-left: 16px;

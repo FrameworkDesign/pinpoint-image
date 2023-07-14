@@ -81,6 +81,20 @@ class PinPointImage extends Fieldtype
                 'default' => true,
                 'width' => 50,
             ],
+            'has_max_fields' => [
+                'display' => __('Has max fields limit'),
+                'instructions' => 'Do you wish to limit how many fields a user can add?',
+                'type' => 'toggle',
+                'default' => false,
+                'width' => 50,
+            ],
+            'max_fields' => [
+                'type' => 'integer',
+                'display' => 'Max Fields',
+                'default' => 5,
+                'instructions' => 'If toggle above is on, then how many fields do you wish to limit it to?',
+                'min' => 1,
+            ],
         ];
     }
 

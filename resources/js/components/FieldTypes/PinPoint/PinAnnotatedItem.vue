@@ -42,10 +42,10 @@
                                 :is="`${field.value}-fieldtype`"
                                 :value.sync="field.content"
                                 :handle="`${field.value}_field`"
-                                name-prefix=""
-                                error-key-prefix=""
+                                :meta="field.meta"
+                                name-prefix="pinpoint-"
+                                error-key-prefix="pinpoint-"
                                 :read-only="false"
-                                deed-eded="$emit('input', $event)"
                                 @input="updateFieldContent($event, field, fIndex)"
                                 @meta-updated="$emit('meta-updated', $event)"
                                 @focus="focused"
@@ -78,7 +78,7 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-row justify-between">
+                    <div class="flex flex-row justify-between mt-5">
                         <button class="btn w-auto flex justify-center items-center" @click="isSelectingNewFieldtype = true;">
                             <svg-icon name="wireframe" class="mr-1 w-4 h-4" />
                             {{ __('Add Field') }}
@@ -122,7 +122,8 @@ export default {
                 // { icon:"html", text:"html", value:"html", content:'' },
                 { icon:"markdown", text:"Markdown", value:"markdown", content:'' },
                 { icon:"text", text:"Text", value:"text", content:'' },
-                { icon:"textarea", text:"Textarea", value:"textarea", content:'' }
+                { icon:"textarea", text:"Textarea", value:"textarea", content:'' },
+                // { icon:"link", text:"Link", value:"link", content:'', meta: { initialSelectedAssets: [], initialSelectedEntries: []}  }
             ]
         }
     },
@@ -140,13 +141,19 @@ export default {
             this.isSelectingNewFieldtype = false
         },
         updateFieldContent($event, field, fIndex) {
+            console.log('updateFieldContent', $event, field, fIndex)
             field.content = $event
         },
         edit() {
             this.modalOpen = true
         },
         removeField(field, fIndex) {
-            this.item.data.fields = this.item.data.fields.filter(item => item.content !== field.content)
+            if (! confirm('Are you sure?')) {
+                return
+            }
+            this.item.data.fields = this.item.data.fields.filter((item, index) => {
+                return index !== fIndex
+            })
         },
         remove() {
             if (confirm('Are you sure?')) {
@@ -155,7 +162,12 @@ export default {
         },
         cleanObject(obj) {
             return JSON.parse(JSON.stringify(obj))
-        }
+        },
+        focused() {
+            if (!this.isLocked) {
+                this.$emit('focus');
+            }
+        },
     }
 }
 </script>
