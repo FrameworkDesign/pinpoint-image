@@ -7415,7 +7415,11 @@ __webpack_require__.r(__webpack_exports__);
       this.fieldValue = this.value;
 
       if (this.value.image !== null) {
-        this.getImageAsset(this.value.image);
+        if (this.meta.statamic_major_version === 3) {
+          return this.getImageAssetV3(this.value.image);
+        } else {
+          this.getImageAsset(this.value.image);
+        }
       }
 
       if (this.value.annotations.length > 0) {
@@ -7501,6 +7505,8 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+      console.log(this.meta.statamic_major_version);
+
       if (this.meta.statamic_major_version === 3) {
         return this.getImageAssetV3(assets[0]);
       }
@@ -7512,7 +7518,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.$axios.get(this.cpUrl("assets-fieldtype"), {
-        assets: [value]
+        params: {
+          assets: value
+        }
       }).then(function (response) {
         console.log(response);
         _this.image = {
@@ -9875,7 +9883,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/framework000/CodeValet/statamic4/addons/weareframework/pinpoint-image/resources/js/cp.js */"./resources/js/cp.js");
+module.exports = __webpack_require__(/*! /Users/framework000/CodeValet/statamic-fwk/addons/weareframework/pinpoint-image/resources/js/cp.js */"./resources/js/cp.js");
 
 
 /***/ })

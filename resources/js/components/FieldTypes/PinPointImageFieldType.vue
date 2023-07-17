@@ -100,7 +100,12 @@ export default {
     if (this.value !== null && this.value.image && this.value.annotations) {
       this.fieldValue = this.value;
       if (this.value.image !== null) {
-        this.getImageAsset(this.value.image);
+
+          if(this.meta.statamic_major_version === 3) {
+              return this.getImageAssetV3(this.value.image);
+          } else {
+              this.getImageAsset(this.value.image);
+          }
       }
 
       if (this.value.annotations.length > 0) {
@@ -186,6 +191,8 @@ export default {
         this.cleanOutImage();
         return;
       }
+
+      console.log(this.meta.statamic_major_version)
       if(this.meta.statamic_major_version === 3) {
           return this.getImageAssetV3(assets[0]);
       }
@@ -197,7 +204,7 @@ export default {
       this.loading = true;
       this.$axios
           .get(this.cpUrl("assets-fieldtype"), {
-              assets:[ value ],
+              params: { assets: value },
           })
           .then((response) => {
               console.log(response)
