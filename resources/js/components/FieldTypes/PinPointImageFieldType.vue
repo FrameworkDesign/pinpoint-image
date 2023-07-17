@@ -192,7 +192,6 @@ export default {
         return;
       }
 
-      console.log(this.meta.statamic_major_version)
       if(this.meta.statamic_major_version === 3) {
           return this.getImageAssetV3(assets[0]);
       }

@@ -7505,8 +7505,6 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      console.log(this.meta.statamic_major_version);
-
       if (this.meta.statamic_major_version === 3) {
         return this.getImageAssetV3(assets[0]);
       }
@@ -9883,7 +9881,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/framework000/CodeValet/statamic-fwk/addons/weareframework/pinpoint-image/resources/js/cp.js */"./resources/js/cp.js");
+module.exports = __webpack_require__(/*! /Users/framework000/CodeValet/statamic4/addons/weareframework/pinpoint-image/resources/js/cp.js */"./resources/js/cp.js");
 
 
 /***/ })
