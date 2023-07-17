@@ -186,7 +186,31 @@ export default {
         this.cleanOutImage();
         return;
       }
+      if(this.meta.statamic_major_version === 3) {
+          return this.getImageAssetV3(assets[0]);
+      }
+
       this.getImageAsset(assets[0]);
+    },
+
+    getImageAssetV3(value) {
+      this.loading = true;
+      this.$axios
+          .get(this.cpUrl("assets-fieldtype"), {
+              assets:[ value ],
+          })
+          .then((response) => {
+              console.log(response)
+              this.image = {
+                  container: "assets",
+                  data: response.data,
+              };
+              this.fieldValue.image = value;
+              this.hasImage = true;
+          })
+          .finally(() => {
+              this.loading = false;
+          });
     },
 
     getImageAsset(value) {

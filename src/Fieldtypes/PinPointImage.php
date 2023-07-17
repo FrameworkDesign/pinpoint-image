@@ -18,6 +18,7 @@ use Statamic\Fieldtypes\Assets\MinRule;
 use Statamic\Fieldtypes\Assets\UndefinedContainerException;
 use Statamic\GraphQL\Types\AssetInterface;
 use Statamic\Http\Resources\CP\Assets\Asset as AssetResource;
+use Statamic\Statamic;
 use Statamic\Support\Arr;
 use Statamic\Support\Str;
 use Weareframework\PinpointImage\GraphQL\PinPointImageFieldType;
@@ -127,10 +128,14 @@ class PinPointImage extends Fieldtype
 
     public function preload()
     {
+        $version = Statamic::version();
+        $versionArray = explode('.', $version);
         return [
             'default' => $this->defaultValue(),
             'data' => $this->getItemData($this->field->value() ?? []),
             'container' => $this->container()->handle(),
+            'statamic_version' => $version,
+            'statamic_major_version' => isset($versionArray[0]) ? (int)$versionArray[0] : 4
         ];
     }
 
@@ -138,7 +143,6 @@ class PinPointImage extends Fieldtype
     {
         return $items;
     }
-
 
     protected function container()
     {

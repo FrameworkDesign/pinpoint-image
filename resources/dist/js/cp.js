@@ -7501,13 +7501,17 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+      if (this.meta.statamic_major_version === 3) {
+        return this.getImageAssetV3(assets[0]);
+      }
+
       this.getImageAsset(assets[0]);
     },
-    getImageAsset: function getImageAsset(value) {
+    getImageAssetV3: function getImageAssetV3(value) {
       var _this = this;
 
       this.loading = true;
-      this.$axios.post(this.cpUrl("assets-fieldtype"), {
+      this.$axios.get(this.cpUrl("assets-fieldtype"), {
         assets: [value]
       }).then(function (response) {
         console.log(response);
@@ -7519,6 +7523,24 @@ __webpack_require__.r(__webpack_exports__);
         _this.hasImage = true;
       })["finally"](function () {
         _this.loading = false;
+      });
+    },
+    getImageAsset: function getImageAsset(value) {
+      var _this2 = this;
+
+      this.loading = true;
+      this.$axios.post(this.cpUrl("assets-fieldtype"), {
+        assets: [value]
+      }).then(function (response) {
+        console.log(response);
+        _this2.image = {
+          container: "assets",
+          data: response.data
+        };
+        _this2.fieldValue.image = value;
+        _this2.hasImage = true;
+      })["finally"](function () {
+        _this2.loading = false;
       });
     },
     cpUrl: function cpUrl(url) {
