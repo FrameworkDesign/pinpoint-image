@@ -4,7 +4,6 @@ namespace Weareframework\PinpointImage\Tags;
 
 use Statamic\Facades\Asset;
 use Statamic\Http\Resources\API\AssetResource;
-use Statamic\Support\Str;
 use Statamic\Tags\Tags;
 
 class PinpointImageTag extends Tags
