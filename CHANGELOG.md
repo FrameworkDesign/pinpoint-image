@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.0.12 (2025-01-08)
+
+## What's changed
+
+- Added Link field with Entry and URL options
+
+## v0.0.11 (2024-12-08)
+
+## What's changed
+
+- Statamic V5 fix applied
+
 ## v0.0.10 (2023-07-14)
 
 ## What's changed
