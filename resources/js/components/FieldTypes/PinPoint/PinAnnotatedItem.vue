@@ -43,6 +43,7 @@
                                 :value.sync="field.content"
                                 :handle="`${field.value}_field`"
                                 :meta="field.meta"
+                                :config="field.config"
                                 name-prefix="pinpoint-"
                                 error-key-prefix="pinpoint-"
                                 :read-only="false"
@@ -109,6 +110,10 @@ export default {
         itemIndex: {
             type: Number,
             default: 0
+        },
+        meta: {
+            type: Object,
+            default: () => ({})
         }
     },
     data() {
@@ -120,10 +125,36 @@ export default {
             fieldtypes: [
                 // { icon:"bard", text:"Bard", value:"bard", content:'' },
                 // { icon:"html", text:"html", value:"html", content:'' },
+                // { icon:"entries", text:"Entries", value:"entries", content:'' },
                 { icon:"markdown", text:"Markdown", value:"markdown", content:'' },
                 { icon:"text", text:"Text", value:"text", content:'' },
                 { icon:"textarea", text:"Textarea", value:"textarea", content:'' },
-                // { icon:"link", text:"Link", value:"link", content:'', meta: { initialSelectedAssets: [], initialSelectedEntries: []}  }
+                {
+                    icon:"link",
+                    text:"Link",
+                    value:"link",
+                    content:'',
+                    meta: {
+                        showAssetOption: false, // key bit to allow assets
+                        initialSelectedAssets: [],
+                        initialSelectedEntries: [],
+                        initialOption: null,
+                        initialUrl: null,
+                        options: [],
+                        entry: this.meta.initEntry,
+                        asset: this.meta.initAsset
+                    },
+                    config: {
+                        always_save:false,
+                        collections: this.meta.collections,
+                        component:"link",
+                        container: this.meta.container,
+                        instructions:null,
+                        prefix:null,
+                        read_only:false,
+                        required:false,
+                    }
+                }
             ]
         }
     },
@@ -137,11 +168,12 @@ export default {
             if(this.item.data.fields === undefined) {
                 this.item.data.fields = []
             }
+            this.item.content = ''
             this.item.data.fields.push(this.cleanObject(fieldType))
             this.isSelectingNewFieldtype = false
         },
         updateFieldContent($event, field, fIndex) {
-            console.log('updateFieldContent', $event, field, fIndex)
+            // console.log('updateFieldContent', $event, field, fIndex)
             field.content = $event
         },
         edit() {
