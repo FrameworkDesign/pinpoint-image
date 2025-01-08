@@ -7213,6 +7213,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     item: {
@@ -7231,6 +7232,12 @@ __webpack_require__.r(__webpack_exports__);
     itemIndex: {
       type: Number,
       "default": 0
+    },
+    meta: {
+      type: Object,
+      "default": function _default() {
+        return {};
+      }
     }
   },
   data: function data() {
@@ -7241,6 +7248,7 @@ __webpack_require__.r(__webpack_exports__);
       fields: this.item.data.fields,
       fieldtypes: [// { icon:"bard", text:"Bard", value:"bard", content:'' },
       // { icon:"html", text:"html", value:"html", content:'' },
+      // { icon:"entries", text:"Entries", value:"entries", content:'' },
       {
         icon: "markdown",
         text: "Markdown",
@@ -7256,8 +7264,33 @@ __webpack_require__.r(__webpack_exports__);
         text: "Textarea",
         value: "textarea",
         content: ''
-      } // { icon:"link", text:"Link", value:"link", content:'', meta: { initialSelectedAssets: [], initialSelectedEntries: []}  }
-      ]
+      }, {
+        icon: "link",
+        text: "Link",
+        value: "link",
+        content: '',
+        meta: {
+          showAssetOption: false,
+          // key bit to allow assets
+          initialSelectedAssets: [],
+          initialSelectedEntries: [],
+          initialOption: null,
+          initialUrl: null,
+          options: [],
+          entry: this.meta.initEntry,
+          asset: this.meta.initAsset
+        },
+        config: {
+          always_save: false,
+          collections: this.meta.collections,
+          component: "link",
+          container: this.meta.container,
+          instructions: null,
+          prefix: null,
+          read_only: false,
+          required: false
+        }
+      }]
     };
   },
   computed: {
@@ -7271,11 +7304,12 @@ __webpack_require__.r(__webpack_exports__);
         this.item.data.fields = [];
       }
 
+      this.item.content = '';
       this.item.data.fields.push(this.cleanObject(fieldType));
       this.isSelectingNewFieldtype = false;
     },
     updateFieldContent: function updateFieldContent($event, field, fIndex) {
-      console.log('updateFieldContent', $event, field, fIndex);
+      // console.log('updateFieldContent', $event, field, fIndex)
       field.content = $event;
     },
     edit: function edit() {
@@ -7395,6 +7429,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7407,9 +7442,8 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     if (this.config.max_files === undefined) {
       this.config.max_files = 1;
-    }
+    } //console.log(this.value)
 
-    console.log(this.value);
 
     if (this.value !== null && this.value.image && this.value.annotations) {
       this.fieldValue = this.value;
@@ -7522,11 +7556,13 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         console.log(response);
         _this.image = {
-          container: "assets",
+          container: _this.meta.container,
           data: response.data
         };
         _this.fieldValue.image = value;
         _this.hasImage = true;
+      })["catch"](function (error) {
+        _this.hasImage = false;
       })["finally"](function () {
         _this.loading = false;
       });
@@ -7540,11 +7576,13 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         console.log(response);
         _this2.image = {
-          container: "assets",
+          container: _this2.meta.container,
           data: response.data
         };
         _this2.fieldValue.image = value;
         _this2.hasImage = true;
+      })["catch"](function (error) {
+        _this2.hasImage = false;
       })["finally"](function () {
         _this2.loading = false;
       });
@@ -7801,7 +7839,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.field-type-pinpoint-image .assets-fieldtype-picker {\n  display: flex;\n  align-items: center;\n  padding: 8px 16px;\n  --bg-opacity: 1;\n  background-color: #f5f8fc;\n  background-color: rgba(\n    244.79999999999998,\n    248.11499999999998,\n    252.45,\n    var(--bg-opacity)\n  );\n  border-width: 1px;\n  border-radius: 3px;\n  min-width: 360px;\n    font-size: 12px;\n}\n.field-type-pinpoint-image .asset-table-listing {\n    display: none;\n}\n.field-type-pinpoint-image .asset-upload-control {\n  margin-left: 16px;\n}\n.field-type-pinpoint-image .upload-text-button {\n  --text-opacity: 1;\n  color: #19a1e6;\n  color: rgba(\n    25.499999999999993,\n    161.49999999999994,\n    229.5,\n    var(--text-opacity)\n  );\n  text-decoration: underline;\n  white-space: nowrap;\n}\n", ""]);
+exports.push([module.i, "\n.field-type-pinpoint-image .assets-fieldtype-picker {\n    display: flex;\n    align-items: center;\n    padding: 8px 16px;\n    --bg-opacity: 1;\n    background-color: #f5f8fc;\n    background-color: rgba(\n        244.79999999999998,\n        248.11499999999998,\n        252.45,\n        var(--bg-opacity)\n    );\n    border-width: 1px;\n    border-radius: 3px;\n    min-width: 360px;\n    font-size: 12px;\n}\n.field-type-pinpoint-image .asset-table-listing {\n    display: none;\n}\n.field-type-pinpoint-image .asset-upload-control {\n    margin-left: 16px;\n}\n.field-type-pinpoint-image .upload-text-button {\n    --text-opacity: 1;\n    color: #19a1e6;\n    color: rgba(\n        25.499999999999993,\n        161.49999999999994,\n        229.5,\n        var(--text-opacity)\n    );\n    text-decoration: underline;\n    white-space: nowrap;\n}\n", ""]);
 
 // exports
 
@@ -7820,7 +7858,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.pinpoint-preview[data-v-1bd3bfc9] {\n  max-width: 100%;\n  position: relative;\n  cursor: crosshair;\n}\n.pinpoint-preview img[data-v-1bd3bfc9] {\n  width: 100%;\n  height: auto;\n}\n.pinpoint-annotate[data-v-1bd3bfc9] {\n  position: absolute;\n  border-radius: 50% 50% 0;\n  transform: rotate(45deg);\n  background-color: #303750;\n  color: #fff;\n\n  height: 30px;\n  width: 30px;\n  text-align: center;\n  line-height: 30px;\n  font-weight: 700;\n  font-size: 12px;\n  cursor: pointer;\n&::after {\n    content: \"\";\n    position: absolute;\n    width: 50%;\n    height: 50%;\n    top: 25%;\n    left: 25%;\n    border-radius: 50%;\n}\n}\n.pin-annotated-items[data-v-1bd3bfc9] {\n  width: 15%;\n}\n.pin-point-image-image[data-v-1bd3bfc9] {\n  width: 85%;\n}\n.pinpoint-annotate span[data-v-1bd3bfc9] {\n  display: block;\n  transform: rotate(-45deg);\n}\n.pinpoint-drag-handle[data-v-1bd3bfc9] {\n  width: 20px;\n  border-left-width: 1px;\n  border-bottom-width: 1px;\n  height: auto;\n  padding: 8px;\n  cursor: -webkit-grab;\n  cursor: grab;\n  background: #f5f8fc url(\"/vendor/pinpoint-image/img/drag-dots.svg\") 50%\n    no-repeat;\n}\n", ""]);
+exports.push([module.i, "\n.pinpoint-preview[data-v-1bd3bfc9] {\n    max-width: 100%;\n    position: relative;\n    cursor: crosshair;\n}\n.pinpoint-preview img[data-v-1bd3bfc9] {\n    width: 100%;\n    height: auto;\n}\n.pinpoint-annotate[data-v-1bd3bfc9] {\n    position: absolute;\n    border-radius: 50% 50% 0;\n    transform: rotate(45deg);\n    background-color: #303750;\n    color: #fff;\n\n    height: 30px;\n    width: 30px;\n    text-align: center;\n    line-height: 30px;\n    font-weight: 700;\n    font-size: 12px;\n    cursor: pointer;\n&::after {\n        content: \"\";\n        position: absolute;\n        width: 50%;\n        height: 50%;\n        top: 25%;\n        left: 25%;\n        border-radius: 50%;\n}\n}\n.pin-annotated-items[data-v-1bd3bfc9] {\n    width: 15%;\n}\n.pin-point-image-image[data-v-1bd3bfc9] {\n    width: 85%;\n}\n.pinpoint-annotate span[data-v-1bd3bfc9] {\n    display: block;\n    transform: rotate(-45deg);\n}\n.pinpoint-drag-handle[data-v-1bd3bfc9] {\n    width: 20px;\n    border-left-width: 1px;\n    border-bottom-width: 1px;\n    height: auto;\n    padding: 8px;\n    cursor: -webkit-grab;\n    cursor: grab;\n    background: #f5f8fc url(\"/vendor/pinpoint-image/img/drag-dots.svg\") 50%\n    no-repeat;\n}\n", ""]);
 
 // exports
 
@@ -8893,6 +8931,7 @@ var render = function () {
                                       value: field.content,
                                       handle: field.value + "_field",
                                       meta: field.meta,
+                                      config: field.config,
                                       "name-prefix": "pinpoint-",
                                       "error-key-prefix": "pinpoint-",
                                       "read-only": false,
@@ -9130,7 +9169,9 @@ var render = function () {
                 },
                 [
                   _vm._v(
-                    "\n      " + _vm._s(_vm.__("Clear Annotations")) + "\n    "
+                    "\n            " +
+                      _vm._s(_vm.__("Clear Annotations")) +
+                      "\n        "
                   ),
                 ]
               )
@@ -9148,7 +9189,13 @@ var render = function () {
                     },
                   },
                 },
-                [_vm._v("\n      " + _vm._s(_vm.__("Clear Image")) + "\n    ")]
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.__("Clear Image")) +
+                      "\n        "
+                  ),
+                ]
               )
             : _vm._e(),
         ])
@@ -9231,7 +9278,11 @@ var render = function () {
                         }),
                         _vm._v(" "),
                         _c("pin-annotated-item", {
-                          attrs: { item: annotation, "item-index": index },
+                          attrs: {
+                            meta: _vm.meta,
+                            item: annotation,
+                            "item-index": index,
+                          },
                           on: {
                             delete: function ($event) {
                               return _vm.remove(index)
@@ -9881,7 +9932,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/framework000/CodeValet/statamic4/addons/weareframework/pinpoint-image/resources/js/cp.js */"./resources/js/cp.js");
+module.exports = __webpack_require__(/*! /Users/quinn/Sites/statamic-5/addons/weareframework/pinpoint-image/resources/js/cp.js */"./resources/js/cp.js");
 
 
 /***/ })
