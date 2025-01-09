@@ -16,11 +16,22 @@
                     @if(isset($annotation['data']['fields']) && is_array($annotation['data']['fields']))
                         @foreach($annotation['data']['fields'] as $field)
                             <div class="mb-4">
-                                @if($field['value'] === 'markdown')
-                                    {{ Illuminate\Mail\Markdown::parse($field['content']) }}
-                                @else
-                                    {{ $field['content'] ?? '' }}
-                                @endif
+                                @switch($field['value'])
+                                    @case('markdown')
+                                            {{ Illuminate\Mail\Markdown::parse($field['content']) }}
+                                        @break
+                                    @case('bard')
+                                            {!! $field['content'] ?? '' !!}
+                                        @break
+                                    @case('code')
+                                        {!! $field['content'] ?? '' !!}
+                                        @break
+                                    @case('link')
+                                        <a href="{{ $field['content'] ?? '' }}">{{ $field['label'] ?? '' }}</a>
+                                        @break
+                                    @default
+
+                                @endswitch
                             </div>
                         @endforeach
                     @endif

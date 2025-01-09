@@ -8,6 +8,10 @@ use Statamic\Facades\Site;
 use Statamic\Http\Resources\API\AssetResource;
 use Statamic\Support\Str;
 use Statamic\Tags\Tags;
+use Tiptap\Editor;
+use Tiptap\Extensions;
+use Tiptap\Marks;
+use Tiptap\Nodes;
 
 class PinpointImageTag extends Tags
 {
@@ -36,17 +40,18 @@ class PinpointImageTag extends Tags
                 if ( !isset($value['data']['fields']) ) {
                     return $value;
                 }
+
                 $value['data']['fields'] = collect($value['data']['fields'])->map(function($field) {
                     $field = match ($field['value']) {
                         'link' => $this->linkField($field),
+                        'code' => $this->codeField($field),
+                        'bard' => $this->bardField($field),
                         default => $field
                     };
                     return $field;
                 })->all();
                 return $value;
             })->all();
-
-            dd($this->params->get('field'), $field);
 
             return view('pinpoint-image::tags.index', [
                 'annotations' => $field['annotations'] ?? [],
@@ -55,6 +60,34 @@ class PinpointImageTag extends Tags
         } catch (\Exception $e) {
             return '';
         }
+    }
+
+    private function codeField($field)
+    {
+        $field['content'] = isset($field['content'], $field['content']['code']) ? $field['content']['code'] : null;
+        return $field;
+    }
+
+    private function bardField($field)
+    {
+        $field['content'] = app()->makeWith(Editor::class, [
+            'configuration' => [
+                'extensions' => [
+                    new Extensions\StarterKit,
+                    new Marks\Link,
+                    new Marks\Bold,
+                    new Marks\Italic,
+                    new Nodes\Image,
+                    new Nodes\Table,
+                    new Nodes\TableCell,
+                    new Nodes\TableHeader,
+                    new Nodes\TableRow,
+                ],
+            ],
+            'content' => $field['content']
+        ])->setContent(['content' => $field['content']])->getHtml();
+
+        return $field;
     }
 
     private function linkField($field)

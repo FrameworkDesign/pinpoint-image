@@ -7119,6 +7119,7 @@ exports.Plugins = Plugins;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _sortable_Sortable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../../../sortable/Sortable */ "./resources/js/sortable/Sortable.js");
 //
 //
 //
@@ -7214,7 +7215,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    SortableList: _sortable_Sortable__WEBPACK_IMPORTED_MODULE_0__["SortableList"]
+  },
   props: {
     item: {
       type: Object,
@@ -7246,10 +7261,7 @@ __webpack_require__.r(__webpack_exports__);
       modalOpen: false,
       heading: this.item.data.heading,
       fields: this.item.data.fields,
-      fieldtypes: [// { icon:"bard", text:"Bard", value:"bard", content:'' },
-      // { icon:"html", text:"html", value:"html", content:'' },
-      // { icon:"entries", text:"Entries", value:"entries", content:'' },
-      {
+      fieldtypes: [{
         icon: "markdown",
         text: "Markdown",
         value: "markdown",
@@ -7269,27 +7281,23 @@ __webpack_require__.r(__webpack_exports__);
         text: "Link",
         value: "link",
         content: '',
-        meta: {
-          showAssetOption: false,
-          // key bit to allow assets
-          initialSelectedAssets: [],
-          initialSelectedEntries: [],
-          initialOption: null,
-          initialUrl: null,
-          options: [],
-          entry: this.meta.initEntry,
-          asset: this.meta.initAsset
+        meta: this.meta.linkConfig.meta,
+        config: this.meta.linkConfig.config
+      }, {
+        icon: "bard",
+        text: "Bard",
+        value: "bard",
+        content: [],
+        config: this.meta.bardConfig
+      }, {
+        icon: "code",
+        text: "Code",
+        value: "code",
+        content: {
+          code: null,
+          mode: "htmlmixed"
         },
-        config: {
-          always_save: false,
-          collections: this.meta.collections,
-          component: "link",
-          container: this.meta.container,
-          instructions: null,
-          prefix: null,
-          read_only: false,
-          required: false
-        }
+        config: this.meta.codeConfig
       }]
     };
   },
@@ -7308,8 +7316,18 @@ __webpack_require__.r(__webpack_exports__);
       this.item.data.fields.push(this.cleanObject(fieldType));
       this.isSelectingNewFieldtype = false;
     },
+    testInput: _.debounce(function (logItem) {
+      console.log('testInput', logItem);
+      this.item.data.fields = logItem;
+      this.$emit('updateorder', {
+        item: this.item,
+        itemIndex: this.itemIndex
+      });
+    }, 500),
+    updateOrder: _.debounce(function () {
+      console.log('updateOrder', this.fields, this.item.data.fields); // this.fields =
+    }, 500),
     updateFieldContent: function updateFieldContent($event, field, fIndex) {
-      // console.log('updateFieldContent', $event, field, fIndex)
       field.content = $event;
     },
     edit: function edit() {
@@ -7353,6 +7371,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PinPoint_PinAnnotatedItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PinPoint/PinAnnotatedItem */ "./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue");
 /* harmony import */ var _sortable_Sortable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../sortable/Sortable */ "./resources/js/sortable/Sortable.js");
+//
 //
 //
 //
@@ -7654,6 +7673,11 @@ __webpack_require__.r(__webpack_exports__);
     updateOrder: _.debounce(function () {
       this.fieldValue.annotations = this.annotations;
     }, 500),
+    updateAnnotationOrder: function updateAnnotationOrder(annotationData) {
+      console.log('updateAnnotationOrder', annotationData);
+      this.annotations[annotationData.index] = annotationData.item;
+      this.annotations = this.cleanObject(this.annotations);
+    },
     roundUp: function roundUp(num, precision) {
       precision = Math.pow(10, precision);
       return Math.ceil(num * precision) / precision;
@@ -7824,6 +7848,25 @@ function move(items, oldIndex, newIndex) {
     });
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css&":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--5-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css& ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.pinpoint-drag-handle-fields {\n    width: 20px;\n    border-width: 1px;\n    height: auto;\n    padding: 8px;\n    cursor: -webkit-grab;\n    cursor: grab;\n    background: #f5f8fc url(\"/vendor/pinpoint-image/img/drag-dots.svg\") 50%\n    no-repeat;\n}\n", ""]);
+
+// exports
+
 
 /***/ }),
 
@@ -8144,6 +8187,36 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--5-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../../node_modules/css-loader??ref--5-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--5-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./PinAnnotatedItem.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
 
 /***/ }),
 
@@ -8789,65 +8862,78 @@ var render = function () {
           domProps: { textContent: _vm._s(_vm.item.data.heading) },
         }),
         _vm._v(" "),
-        _c("div", { staticClass: "flex justify-between w-full--" }, [
-          _c(
-            "a",
-            {
-              directives: [
-                {
-                  name: "tooltip",
-                  rawName: "v-tooltip",
-                  value: "Edit Point Data",
-                  expression: "'Edit Point Data'",
-                },
-              ],
-              staticClass: "text-xs",
-              attrs: { href: "#" },
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.edit.apply(null, arguments)
-                },
-              },
-            },
-            [
-              _c("svg-icon", {
-                staticClass: "w-4 h-4",
-                attrs: { name: "form" },
-              }),
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              directives: [
-                {
-                  name: "tooltip",
-                  rawName: "v-tooltip",
-                  value: "Delete Point",
-                  expression: "'Delete Point'",
-                },
-              ],
-              staticClass: "text-xs",
-              attrs: { href: "#" },
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.remove.apply(null, arguments)
+        _c(
+          "div",
+          {
+            staticClass:
+              "flex flex-row flex-wrap justify-between w-full-- mt-4",
+          },
+          [
+            _c(
+              "a",
+              {
+                directives: [
+                  {
+                    name: "tooltip",
+                    rawName: "v-tooltip",
+                    value: "Edit Point Data",
+                    expression: "'Edit Point Data'",
+                  },
+                ],
+                staticClass: "text-xs flex items-center justify-center",
+                attrs: { href: "#" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.edit.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [
-              _c("svg-icon", {
-                staticClass: "w-4 h-4",
-                attrs: { name: "trash" },
-              }),
-            ],
-            1
-          ),
-        ]),
+              [
+                _c("svg-icon", {
+                  staticClass: "w-4 h-4",
+                  staticStyle: { "min-width": "10px" },
+                  attrs: { name: "form" },
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "text-xs ml-1" }, [_vm._v("Edit")]),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                directives: [
+                  {
+                    name: "tooltip",
+                    rawName: "v-tooltip",
+                    value: "Delete Point",
+                    expression: "'Delete Point'",
+                  },
+                ],
+                staticClass: "text-xs flex items-center justify-center mt-2",
+                attrs: { href: "#" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.remove.apply(null, arguments)
+                  },
+                },
+              },
+              [
+                _c("svg-icon", {
+                  staticClass: "w-4 h-4",
+                  staticStyle: { "min-width": "10px" },
+                  attrs: { name: "trash" },
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "text-xs ml-1" }, [_vm._v("Delete")]),
+              ],
+              1
+            ),
+          ]
+        ),
       ]),
       _vm._v(" "),
       _vm.modalOpen
@@ -8861,268 +8947,360 @@ var render = function () {
               },
             },
             [
-              _c("div", { staticClass: "p-3 relative" }, [
-                _c("button", {
-                  staticClass: "btn-close absolute top-0 right-0 mt-2 mr-2",
-                  attrs: { "aria-label": _vm.__("Close") },
-                  domProps: { innerHTML: _vm._s("&times") },
-                  on: {
-                    click: function ($event) {
-                      _vm.modalOpen = false
-                    },
-                  },
-                }),
-                _vm._v(" "),
-                _c("div", { staticClass: "content mt-0 mb-2" }, [
-                  _c("h2", [_vm._v("Content")]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "max-w-lg" }, [
-                    _vm._v("Edit your pinpoints content here:"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", [
-                  _c("label", { staticClass: "text-base font-bold mb-1" }, [
-                    _vm._v("Heading"),
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.item.data.heading,
-                        expression: "item.data.heading",
-                      },
-                    ],
-                    staticClass: "input-text mb-2",
-                    attrs: { type: "text" },
-                    domProps: { value: _vm.item.data.heading },
+              _c(
+                "div",
+                {
+                  staticClass: "p-3 relative",
+                  staticStyle: { "overflow-y": "auto", "max-height": "700px" },
+                },
+                [
+                  _c("button", {
+                    staticClass: "btn-close absolute top-0 right-0 mt-2 mr-2",
+                    attrs: { "aria-label": _vm.__("Close") },
+                    domProps: { innerHTML: _vm._s("&times") },
                     on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.item.data, "heading", $event.target.value)
+                      click: function ($event) {
+                        _vm.modalOpen = false
                       },
                     },
                   }),
                   _vm._v(" "),
-                  _vm.hasFields
-                    ? _c(
-                        "div",
-                        [
-                          _c(
-                            "label",
-                            { staticClass: "text-base font-bold mb-1" },
-                            [_vm._v("Fields")]
-                          ),
-                          _vm._v(" "),
+                  _c("div", { staticClass: "content mt-0 mb-2" }, [
+                    _c("h2", [_vm._v("Content")]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "max-w-lg" }, [
+                      _vm._v("Edit your pinpoints content here:"),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c("label", { staticClass: "text-base font-bold mb-1" }, [
+                      _vm._v("Heading"),
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.item.data.heading,
+                          expression: "item.data.heading",
+                        },
+                      ],
+                      staticClass: "input-text mb-5",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.item.data.heading },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.item.data,
+                            "heading",
+                            $event.target.value
+                          )
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "text-base font-bold mb-1" }, [
+                      _vm._v("Fields:"),
+                    ]),
+                    _vm._v(" "),
+                    _vm.hasFields
+                      ? _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              "overflow-y": "auto",
+                              "max-height": "400px",
+                            },
+                          },
                           _vm._l(
                             _vm.item.data.fields,
                             function (field, fIndex) {
                               return _c(
                                 "div",
-                                { key: fIndex, staticClass: "w-full pb-4" },
+                                {
+                                  key: fIndex,
+                                  staticClass: "border rounded p-2 mb-4",
+                                },
                                 [
-                                  _c(field.value + "-fieldtype", {
-                                    tag: "component",
-                                    attrs: {
-                                      value: field.content,
-                                      handle: field.value + "_field",
-                                      meta: field.meta,
-                                      config: field.config,
-                                      "name-prefix": "pinpoint-",
-                                      "error-key-prefix": "pinpoint-",
-                                      "read-only": false,
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "mb-1 flex items-center justify-start",
                                     },
-                                    on: {
-                                      "update:value": function ($event) {
-                                        return _vm.$set(
-                                          field,
-                                          "content",
-                                          $event
-                                        )
-                                      },
-                                      input: function ($event) {
-                                        return _vm.updateFieldContent(
-                                          $event,
-                                          field,
-                                          fIndex
-                                        )
-                                      },
-                                      "meta-updated": function ($event) {
-                                        return _vm.$emit("meta-updated", $event)
-                                      },
-                                      focus: _vm.focused,
-                                    },
-                                  }),
+                                    [
+                                      _c(
+                                        "label",
+                                        {
+                                          staticClass: "font-size: 12px;",
+                                          attrs: {
+                                            for: field.value + "_field_label",
+                                          },
+                                        },
+                                        [_vm._v("Name:")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: field.label,
+                                            expression: "field.label",
+                                          },
+                                        ],
+                                        staticClass: "input-text ml-1",
+                                        staticStyle: {
+                                          padding: "5px",
+                                          "font-size": "12px",
+                                          height: "30px",
+                                          "max-width": "250px",
+                                        },
+                                        attrs: {
+                                          name: field.value + "_field_label",
+                                        },
+                                        domProps: { value: field.label },
+                                        on: {
+                                          input: function ($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              field,
+                                              "label",
+                                              $event.target.value
+                                            )
+                                          },
+                                        },
+                                      }),
+                                    ]
+                                  ),
                                   _vm._v(" "),
                                   _c(
                                     "div",
-                                    { staticClass: "flex justify-end mt-1" },
+                                    { staticClass: "w-full pb-4 flex" },
                                     [
                                       _c(
-                                        "a",
-                                        {
-                                          directives: [
-                                            {
-                                              name: "tooltip",
-                                              rawName: "v-tooltip",
-                                              value: "Delete field",
-                                              expression: "'Delete field'",
-                                            },
-                                          ],
-                                          staticClass: "text-xs",
-                                          attrs: { href: "#" },
-                                          on: {
-                                            click: function ($event) {
-                                              $event.preventDefault()
-                                              return _vm.removeField(
-                                                field,
-                                                fIndex
-                                              )
-                                            },
-                                          },
-                                        },
+                                        "div",
+                                        { staticClass: "w-full" },
                                         [
-                                          _c("svg-icon", {
-                                            staticClass: "w-4 h-4",
-                                            attrs: { name: "trash" },
+                                          _c(field.value + "-fieldtype", {
+                                            tag: "component",
+                                            attrs: {
+                                              value: field.content,
+                                              handle: field.value + "_field",
+                                              meta: field.meta,
+                                              config: field.config,
+                                              "name-prefix": "pinpoint-",
+                                              "error-key-prefix": "pinpoint-",
+                                              "read-only": false,
+                                            },
+                                            on: {
+                                              "update:value": function (
+                                                $event
+                                              ) {
+                                                return _vm.$set(
+                                                  field,
+                                                  "content",
+                                                  $event
+                                                )
+                                              },
+                                              input: function ($event) {
+                                                return _vm.updateFieldContent(
+                                                  $event,
+                                                  field,
+                                                  fIndex
+                                                )
+                                              },
+                                              "meta-updated": function (
+                                                $event
+                                              ) {
+                                                return _vm.$emit(
+                                                  "meta-updated",
+                                                  $event
+                                                )
+                                              },
+                                              focus: _vm.focused,
+                                            },
                                           }),
                                         ],
                                         1
                                       ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "flex justify-end mt-1 ml-1",
+                                        },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              directives: [
+                                                {
+                                                  name: "tooltip",
+                                                  rawName: "v-tooltip",
+                                                  value: "Delete field",
+                                                  expression: "'Delete field'",
+                                                },
+                                              ],
+                                              staticClass: "text-xs",
+                                              attrs: { href: "#" },
+                                              on: {
+                                                click: function ($event) {
+                                                  $event.preventDefault()
+                                                  return _vm.removeField(
+                                                    field,
+                                                    fIndex
+                                                  )
+                                                },
+                                              },
+                                            },
+                                            [
+                                              _c("svg-icon", {
+                                                staticClass: "w-4 h-4",
+                                                attrs: { name: "trash" },
+                                              }),
+                                            ],
+                                            1
+                                          ),
+                                        ]
+                                      ),
                                     ]
                                   ),
-                                ],
-                                1
+                                ]
                               )
                             }
                           ),
-                        ],
-                        2
-                      )
-                    : _vm._e(),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mt-5" }, [
-                  _vm.isSelectingNewFieldtype
-                    ? _c("div", [
-                        _c("div", { staticClass: "fieldtype-selector" }, [
-                          _c(
-                            "div",
-                            { staticClass: "fieldtype-list" },
-                            _vm._l(
-                              _vm.fieldtypes,
-                              function (fieldtype, findex) {
-                                return _c(
-                                  "div",
-                                  { key: findex, staticClass: "p-1" },
-                                  [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "bg-white border border-grey-50 flex items-center group w-full rounded hover:border-grey-60 shadow-sm hover:shadow-md pr-1.5",
-                                        on: {
-                                          click: function ($event) {
-                                            return _vm.select(fieldtype)
+                          0
+                        )
+                      : _vm._e(),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-5" }, [
+                    _vm.isSelectingNewFieldtype
+                      ? _c("div", [
+                          _c("div", { staticClass: "fieldtype-selector" }, [
+                            _c(
+                              "div",
+                              { staticClass: "fieldtype-list" },
+                              _vm._l(
+                                _vm.fieldtypes,
+                                function (fieldtype, findex) {
+                                  return _c(
+                                    "div",
+                                    { key: findex, staticClass: "p-1" },
+                                    [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "bg-white border border-grey-50 flex items-center group w-full rounded hover:border-grey-60 shadow-sm hover:shadow-md pr-1.5",
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.select(fieldtype)
+                                            },
                                           },
                                         },
-                                      },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass:
-                                              "p-1 flex items-center border-r border-grey-50 group-hover:border-grey-60 bg-grey-20 rounded-l",
-                                          },
-                                          [
-                                            _c("svg-icon", {
+                                        [
+                                          _c(
+                                            "div",
+                                            {
                                               staticClass:
-                                                "h-5 w-5 text-grey-80",
-                                              attrs: {
-                                                name: fieldtype.icon,
-                                                default: "generic-field",
-                                              },
-                                            }),
-                                          ],
-                                          1
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "span",
-                                          {
-                                            staticClass:
-                                              "pl-1.5 text-grey-80 text-md group-hover:text-grey-90",
-                                          },
-                                          [_vm._v(_vm._s(fieldtype.text))]
-                                        ),
-                                      ]
-                                    ),
-                                  ]
-                                )
-                              }
+                                                "p-1 flex items-center border-r border-grey-50 group-hover:border-grey-60 bg-grey-20 rounded-l",
+                                            },
+                                            [
+                                              _c("svg-icon", {
+                                                staticClass:
+                                                  "h-5 w-5 text-grey-80",
+                                                attrs: {
+                                                  name: fieldtype.icon,
+                                                  default: "generic-field",
+                                                },
+                                              }),
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "span",
+                                            {
+                                              staticClass:
+                                                "pl-1.5 text-grey-80 text-md group-hover:text-grey-90",
+                                            },
+                                            [_vm._v(_vm._s(fieldtype.text))]
+                                          ),
+                                        ]
+                                      ),
+                                    ]
+                                  )
+                                }
+                              ),
+                              0
                             ),
-                            0
-                          ),
-                        ]),
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "flex flex-row justify-between mt-5" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "btn w-auto flex justify-center items-center",
-                          on: {
-                            click: function ($event) {
-                              _vm.isSelectingNewFieldtype = true
+                          ]),
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "flex flex-row justify-between mt-5" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "btn w-auto flex justify-center items-center",
+                            on: {
+                              click: function ($event) {
+                                _vm.isSelectingNewFieldtype = true
+                              },
                             },
                           },
-                        },
-                        [
-                          _c("svg-icon", {
-                            staticClass: "mr-1 w-4 h-4",
-                            attrs: { name: "wireframe" },
-                          }),
-                          _vm._v(
-                            "\n                        " +
-                              _vm._s(_vm.__("Add Field")) +
-                              "\n                    "
-                          ),
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "btn-primary w-auto ml-auto flex justify-center items-center",
-                          on: {
-                            click: function ($event) {
-                              _vm.modalOpen = false
+                          [
+                            _c("svg-icon", {
+                              staticClass: "mr-1 w-4 h-4",
+                              attrs: { name: "wireframe" },
+                            }),
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(_vm.__("Add Field")) +
+                                "\n                    "
+                            ),
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "btn-primary w-auto ml-auto flex justify-center items-center",
+                            on: {
+                              click: function ($event) {
+                                _vm.modalOpen = false
+                              },
                             },
                           },
-                        },
-                        [
-                          _vm._v(
-                            "\n                        " +
-                              _vm._s(_vm.__("Close")) +
-                              "\n                    "
-                          ),
-                        ]
-                      ),
-                    ]
-                  ),
-                ]),
-              ]),
+                          [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(_vm.__("Close")) +
+                                "\n                    "
+                            ),
+                          ]
+                        ),
+                      ]
+                    ),
+                  ]),
+                ]
+              ),
             ]
           )
         : _vm._e(),
@@ -9290,6 +9468,7 @@ var render = function () {
                             "update:item": function ($event) {
                               annotation = $event
                             },
+                            updateorder: _vm.updateAnnotationOrder,
                           },
                         }),
                       ],
@@ -9477,7 +9656,9 @@ function normalizeComponent (
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PinAnnotatedItem_vue_vue_type_template_id_118f9b76___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PinAnnotatedItem.vue?vue&type=template&id=118f9b76& */ "./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=template&id=118f9b76&");
 /* harmony import */ var _PinAnnotatedItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PinAnnotatedItem.vue?vue&type=script&lang=js& */ "./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _PinAnnotatedItem_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PinAnnotatedItem.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -9485,7 +9666,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _PinAnnotatedItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _PinAnnotatedItem_vue_vue_type_template_id_118f9b76___WEBPACK_IMPORTED_MODULE_0__["render"],
   _PinAnnotatedItem_vue_vue_type_template_id_118f9b76___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -9514,6 +9695,22 @@ component.options.__file = "resources/js/components/FieldTypes/PinPoint/PinAnnot
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PinAnnotatedItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./PinAnnotatedItem.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PinAnnotatedItem_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css&":
+/*!***********************************************************************************************************!*\
+  !*** ./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css& ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinAnnotatedItem_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader!../../../../../node_modules/css-loader??ref--5-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--5-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./PinAnnotatedItem.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldTypes/PinPoint/PinAnnotatedItem.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinAnnotatedItem_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinAnnotatedItem_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinAnnotatedItem_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PinAnnotatedItem_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
 
 /***/ }),
 

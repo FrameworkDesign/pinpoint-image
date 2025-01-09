@@ -102,7 +102,6 @@ class PinPointImage extends Fieldtype
      */
     public function preProcess($values)
     {
-//        dd('preProcess first?');
         if (is_null($values) || empty($values)) {
             return null;
         }
@@ -120,7 +119,6 @@ class PinPointImage extends Fieldtype
         $fields = $this->config('fields');
 
         return new BlueprintFields($fields, $this->field()->parent(), $this->field());
-        //return new BlueprintFields($this->configFieldItems());
     }
 
     public function preload()
@@ -128,10 +126,6 @@ class PinPointImage extends Fieldtype
         $version = Statamic::version();
         $versionArray = explode('.', $version);
         $showAssetOption = $this->showAssetOption();
-        $entries = Entry::whereCollection('pages');
-
-        $entryFieldtype = $this->nestedEntriesFieldtype(null);
-        $assetFieldtype = $showAssetOption ? $this->nestedAssetsFieldtype(null) : null;
 
         return [
             'collections' => $this->collections(),
@@ -139,15 +133,10 @@ class PinPointImage extends Fieldtype
             'data' => $this->getData($this->field->value() ?? []),
             'container' => $this->container()->handle(),
             'showAssetOption' => $showAssetOption,
-            'entries' => $entries,
-            'initEntry' => [
-                'config' => $entryFieldtype->config(),
-                'meta' => $entryFieldtype->preload(),
-            ],
-            'initAsset' => $showAssetOption ? [
-                'config' => $assetFieldtype->config(),
-                'meta' => $assetFieldtype->preload(),
-            ] : null,
+            'entries' => [],
+            'codeConfig' => $this->getCodeConfig(),
+            'bardConfig' => $this->getBardConfig(),
+            'linkConfig' => $this->getLinkConfig(),
             'statamic_version' => $version,
             'statamic_major_version' => isset($versionArray[0]) ? (int) $versionArray[0] : 4,
         ];
@@ -168,13 +157,11 @@ class PinPointImage extends Fieldtype
                     'link' => $this->linkField($field),
                     default => $field
                 };
-//                dd($field,'$fieldhere?');
                 return $field;
             })->all();
             return $value;
         })->all();
 
-//        dd($values, 'preload', $this->fields());
         return $values;
     }
 
@@ -307,5 +294,120 @@ class PinPointImage extends Fieldtype
         }
 
         return $collections;
+    }
+
+    private function getLinkConfig()
+    {
+        $showAssetOption = $this->showAssetOption();
+        $entryFieldtype = $this->nestedEntriesFieldtype(null);
+        $assetFieldtype = $showAssetOption ? $this->nestedAssetsFieldtype(null) : null;
+        return [
+            'meta' => [
+                'showAssetOption' => false, // key bit to allow assets
+                'initialSelectedAssets' => [],
+                'initialSelectedEntries' => [],
+                'initialOption' => null,
+                'initialUrl' => null,
+                'options' => [],
+                'entry' => [
+                    'config' => $entryFieldtype->config(),
+                    'meta' => $entryFieldtype->preload(),
+                ],
+                'asset' => $showAssetOption ? [
+                    'config' => $assetFieldtype->config(),
+                    'meta' => $assetFieldtype->preload(),
+                ] : null,
+            ],
+            'config' => [
+                'always_save' => false,
+                'collections' => $this->collections(),
+                'component' => "link",
+                'container' => $this->container()->handle(),
+                'instructions' => null,
+                'prefix' => null,
+                'read_only' => false,
+                'required' => false,
+            ]
+        ];
+    }
+
+
+    private function getBardConfig()
+    {
+        return [
+            'allow_source' => true,
+            'always_save' => false,
+            'always_show_set_button' => false,
+            'antlers' => false,
+            'buttons' => [
+                'h2',
+                'h3',
+                'bold',
+                'italic',
+                //'unorderedlist',
+                //'orderedlist',
+                'removeformat',
+                //'quote',
+                //'anchor',
+                //'image',
+                //'table',
+            ],
+            'character_limit' => 0,
+            'collapse' => false,
+            'component' => "bard",
+            'container' => $this->container(),
+            'display' => "Content Blocks",
+            'enable_input_rules' => true,
+            'enable_paste_rules' => true,
+            'fullscreen' => true,
+            'handle' => "content_blocks",
+            'inline' => false,
+            'instructions' => null,
+            'link_collections' => [],
+            'link_noopener' => false,
+            'link_noreferrer' => false,
+            'localizable' => true,
+            'placeholder' => null,
+            'prefix' => null,
+            'previews' => true,
+            'read_only' => false,
+            'reading_time' => true,
+            'remove_empty_nodes' => "false",
+            'required' => false,
+            'save_html' => false,
+            'sets' => [],
+            'smart_typography' => false,
+            'target_blank' => false,
+            'toolbar_mode' => "fixed",
+            'type' => "bard",
+            'visibility' => "visible",
+            'word_count' => false
+        ];
+    }
+
+    private function getCodeConfig()
+    {
+        return [
+            'always_save' => false,
+            'antlers' => false,
+            'component' => "code",
+            'display' => "Code Field",
+            'handle' => "code_field",
+            'indent_size' => 4,
+            'indent_type' => "tabs",
+            'instructions' => null,
+            'key_map' => "default",
+            'line_numbers' => true,
+            'line_wrapping' => true,
+            'mode' => "htmlmixed",
+            'mode_selectable' => true,
+            'prefix' => null,
+            'read_only' => false,
+            'required' => false,
+            'rulers' => [],
+            'theme' => "material",
+            'type' => "code",
+            'visibility' => "visible"
+        ];
     }
 }

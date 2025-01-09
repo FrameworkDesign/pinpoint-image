@@ -50,6 +50,7 @@
                                 @delete="remove(index)"
                                 :item.sync="annotation"
                                 :item-index="index"
+                                @updateorder="updateAnnotationOrder"
                             ></pin-annotated-item>
                         </div>
                     </div>
@@ -324,6 +325,12 @@ export default {
         updateOrder: _.debounce(function () {
             this.fieldValue.annotations = this.annotations;
         }, 500),
+
+        updateAnnotationOrder(annotationData) {
+            console.log('updateAnnotationOrder', annotationData)
+            this.annotations[annotationData.index] = annotationData.item;
+            this.annotations = this.cleanObject(this.annotations)
+        },
 
         roundUp(num, precision) {
             precision = Math.pow(10, precision);
