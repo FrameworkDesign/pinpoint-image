@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0.14 (2025-01-20)
+### What's changed
+- Updated readme
+
 ## v0.0.13 (2025-01-09)
 ### What's changed
 - Added Code field
