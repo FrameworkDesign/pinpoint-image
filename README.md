@@ -19,6 +19,15 @@ This addon does:
 - Output the field data to the frontend with a handy tag ```{{ pinpoint_image :field="pinpoint_image_field" }}``` (:field= is the name of the field handle when you create the field in blueprint)
 - Edit the outputted field on the frontend
 
+### Fields Supports
+
+Current fields are:
+
+- Text
+- Textarea
+- Markdown
+- Link field (asset & url)
+- Bard (basic fields)
 
 ## License
 Pinpoint image requires a license to be used while on a production site.
