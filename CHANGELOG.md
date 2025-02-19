@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.15 (2025-02-19)
+### What's changed
+- Drag to upload feature was not working. 
+- Text spacing was incorrect on first load
+- Updated readme
+
 ## v0.0.14 (2025-01-20)
 ### What's changed
 - Updated readme
