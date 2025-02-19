@@ -7449,6 +7449,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7882,7 +7883,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.field-type-pinpoint-image .assets-fieldtype-picker {\n    display: flex;\n    align-items: center;\n    padding: 8px 16px;\n    --bg-opacity: 1;\n    background-color: #f5f8fc;\n    background-color: rgba(\n        244.79999999999998,\n        248.11499999999998,\n        252.45,\n        var(--bg-opacity)\n    );\n    border-width: 1px;\n    border-radius: 3px;\n    min-width: 360px;\n    font-size: 12px;\n}\n.field-type-pinpoint-image .asset-table-listing {\n    display: none;\n}\n.field-type-pinpoint-image .asset-upload-control {\n    margin-left: 16px;\n}\n.field-type-pinpoint-image .upload-text-button {\n    --text-opacity: 1;\n    color: #19a1e6;\n    color: rgba(\n        25.499999999999993,\n        161.49999999999994,\n        229.5,\n        var(--text-opacity)\n    );\n    text-decoration: underline;\n    white-space: nowrap;\n}\n", ""]);
+exports.push([module.i, "\n.field-type-pinpoint-image .assets-fieldtype-picker {\n    //display: flex;\n    align-items: center;\n    padding: 8px 16px;\n    --bg-opacity: 1;\n    background-color: #f5f8fc;\n    background-color: rgba(\n        244.79999999999998,\n        248.11499999999998,\n        252.45,\n        var(--bg-opacity)\n    );\n    border-width: 1px;\n    border-radius: 3px;\n    min-width: 360px;\n    font-size: 12px;\n    position: relative;\n}\n.field-type-pinpoint-image .pin-has-image-wrap {\n    border-top-width: 1px;\n}\n.field-type-pinpoint-image .asset-table-listing {\n    display: none;\n}\n.field-type-pinpoint-image .asset-upload-control {\n    margin-left: 16px;\n}\n.field-type-pinpoint-image .upload-text-button {\n    --text-opacity: 1;\n    color: #19a1e6;\n    color: rgba(\n        25.499999999999993,\n        161.49999999999994,\n        229.5,\n        var(--text-opacity)\n    );\n    text-decoration: underline;\n    white-space: nowrap;\n    display: flex;\n    flex-wrap: wrap;\n}\n", ""]);
 
 // exports
 
@@ -9379,24 +9380,31 @@ var render = function () {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "assets-fieldtype-picker" },
-      [
-        _c("assets-fieldtype", {
-          ref: "assets",
-          attrs: {
-            value: _vm.assetImage,
-            handle: "assets",
-            config: _vm.config,
-            meta: _vm.meta,
-            readOnly: _vm.readOnly,
-          },
-          on: { input: _vm.updateKey },
-        }),
-      ],
-      1
-    ),
+    !_vm.hasImage
+      ? _c(
+          "div",
+          { staticClass: "assets-fieldtype-picker" },
+          [
+            _c("assets-fieldtype", {
+              ref: "assets",
+              attrs: {
+                value: _vm.assetImage,
+                handle: "assets",
+                config: _vm.config,
+                meta: _vm.meta,
+                readOnly: _vm.readOnly,
+              },
+              on: {
+                input: _vm.updateKey,
+                "meta-updated": function ($event) {
+                  _vm.meta.asset.meta = $event
+                },
+              },
+            }),
+          ],
+          1
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c(
       "div",
@@ -9409,7 +9417,7 @@ var render = function () {
             expression: "hasImage",
           },
         ],
-        staticClass: "flex flex-row parent-wrap",
+        staticClass: "flex flex-row parent-wrap pin-has-image-wrap",
       },
       [
         _c(

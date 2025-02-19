@@ -17,7 +17,7 @@
             </button>
         </div>
 
-        <div class="assets-fieldtype-picker">
+        <div class="assets-fieldtype-picker" v-if="!hasImage">
             <assets-fieldtype
                 :value="assetImage"
                 ref="assets"
@@ -26,9 +26,10 @@
                 :meta="meta"
                 :readOnly="readOnly"
                 @input="updateKey"
+                @meta-updated="meta.asset.meta = $event"
             ></assets-fieldtype>
         </div>
-        <div class="flex flex-row parent-wrap" v-show="hasImage">
+        <div class="flex flex-row parent-wrap pin-has-image-wrap" v-show="hasImage">
             <div class="pin-annotated-items">
                 <sortable-list
                     v-model="annotations"
@@ -349,7 +350,7 @@ export default {
 </script>
 <style>
 .field-type-pinpoint-image .assets-fieldtype-picker {
-    display: flex;
+    //display: flex;
     align-items: center;
     padding: 8px 16px;
     --bg-opacity: 1;
@@ -364,6 +365,11 @@ export default {
     border-radius: 3px;
     min-width: 360px;
     font-size: 12px;
+    position: relative;
+}
+
+.field-type-pinpoint-image .pin-has-image-wrap {
+    border-top-width: 1px;
 }
 
 .field-type-pinpoint-image .asset-table-listing {
@@ -383,6 +389,8 @@ export default {
     );
     text-decoration: underline;
     white-space: nowrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 </style>
 <style scoped>
