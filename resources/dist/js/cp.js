@@ -7460,10 +7460,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   mixins: [Fieldtype, _sortable_Sortable__WEBPACK_IMPORTED_MODULE_1__["SortableHelpers"]],
   mounted: function mounted() {
-    if (this.config.max_files === undefined) {
-      this.config.max_files = 1;
-    } //console.log(this.value)
-
+    this.config.max_files = 1;
+    this.config.min_files = 0;
+    this.config.mode = 'list';
 
     if (this.value !== null && this.value.image && this.value.annotations) {
       this.fieldValue = this.value;
@@ -7545,6 +7544,7 @@ __webpack_require__.r(__webpack_exports__);
       this.fieldValue.image = null;
       var newMeta = this.cleanObject(this.meta);
       newMeta.data = [];
+      this.hasImage = false;
       this.updateMeta(newMeta);
       this.update([]);
     },
@@ -7574,7 +7574,6 @@ __webpack_require__.r(__webpack_exports__);
           assets: value
         }
       }).then(function (response) {
-        console.log(response);
         _this.image = {
           container: _this.meta.container,
           data: response.data
@@ -7594,7 +7593,6 @@ __webpack_require__.r(__webpack_exports__);
       this.$axios.post(this.cpUrl("assets-fieldtype"), {
         assets: [value]
       }).then(function (response) {
-        console.log(response);
         _this2.image = {
           container: _this2.meta.container,
           data: response.data
@@ -7675,7 +7673,6 @@ __webpack_require__.r(__webpack_exports__);
       this.fieldValue.annotations = this.annotations;
     }, 500),
     updateAnnotationOrder: function updateAnnotationOrder(annotationData) {
-      console.log('updateAnnotationOrder', annotationData);
       this.annotations[annotationData.index] = annotationData.item;
       this.annotations = this.cleanObject(this.annotations);
     },
@@ -9396,9 +9393,7 @@ var render = function () {
               },
               on: {
                 input: _vm.updateKey,
-                "meta-updated": function ($event) {
-                  _vm.meta.asset.meta = $event
-                },
+                "upload-complete": _vm.uploadComplete,
               },
             }),
           ],

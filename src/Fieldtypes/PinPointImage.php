@@ -130,7 +130,7 @@ class PinPointImage extends Fieldtype
         return [
             'collections' => $this->collections(),
             'default' => $this->defaultValue(),
-            'data' => $this->getData($this->field->value() ?? []),
+            'data' => [],//$this->getData($this->field->value() ?? []),
             'container' => $this->container()->handle(),
             'showAssetOption' => $showAssetOption,
             'entries' => [],

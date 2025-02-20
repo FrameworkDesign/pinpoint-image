@@ -26,7 +26,7 @@
                 :meta="meta"
                 :readOnly="readOnly"
                 @input="updateKey"
-                @meta-updated="meta.asset.meta = $event"
+                @upload-complete="uploadComplete"
             ></assets-fieldtype>
         </div>
         <div class="flex flex-row parent-wrap pin-has-image-wrap" v-show="hasImage">
@@ -94,11 +94,10 @@ export default {
     mixins: [Fieldtype, SortableHelpers],
 
     mounted() {
-        if (this.config.max_files === undefined) {
-            this.config.max_files = 1;
-        }
+        this.config.max_files = 1
+        this.config.min_files = 0
+        this.config.mode = 'list'
 
-        //console.log(this.value)
 
         if (this.value !== null && this.value.image && this.value.annotations) {
             this.fieldValue = this.value;
@@ -182,6 +181,7 @@ export default {
             this.fieldValue.image = null;
             let newMeta = this.cleanObject(this.meta);
             newMeta.data = [];
+            this.hasImage = false;
             this.updateMeta(newMeta);
             this.update([]);
         },
@@ -209,7 +209,6 @@ export default {
                     params: { assets: value },
                 })
                 .then((response) => {
-                    console.log(response)
                     this.image = {
                         container: this.meta.container,
                         data: response.data,
@@ -232,7 +231,6 @@ export default {
                     assets: [ value ],
                 })
                 .then((response) => {
-                    console.log(response)
                     this.image = {
                         container: this.meta.container,
                         data: response.data,
@@ -328,7 +326,6 @@ export default {
         }, 500),
 
         updateAnnotationOrder(annotationData) {
-            console.log('updateAnnotationOrder', annotationData)
             this.annotations[annotationData.index] = annotationData.item;
             this.annotations = this.cleanObject(this.annotations)
         },
