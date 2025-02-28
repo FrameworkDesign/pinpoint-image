@@ -7449,7 +7449,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7625,8 +7624,8 @@ __webpack_require__.r(__webpack_exports__);
       var position = this.getPosition(e.currentTarget);
       var xPosition = e.clientX - position.x - 40 / 2;
       var yPosition = e.clientY - position.y - 40 / 2;
-      var width = this.$refs.floorplan.clientWidth;
-      var height = this.$refs.floorplan.clientHeight; // convert position to percentage values
+      var width = this.$refs.pinpointImage.clientWidth;
+      var height = this.$refs.pinpointImage.clientHeight; // convert position to percentage values
 
       var x = this.roundUp(xPosition / width * 100, 0);
       var y = this.roundUp(yPosition / height * 100, 0);
@@ -7664,10 +7663,38 @@ __webpack_require__.r(__webpack_exports__);
       this.annotations.splice(index, 1);
       this.fieldValue.annotations = this.annotations;
     },
-    dragEnd: function dragEnd($event, item, index) {
-      var xy = this.getXyPosition($event);
-      this.annotations[index].x = item.x + xy.x;
-      this.annotations[index].y = item.y + xy.y;
+    dragStart: function dragStart(index, event) {
+      var pinPoint = this.annotations[index];
+      var startX = event.clientX,
+          startY = event.clientY;
+      var startLeft = pinPoint.x,
+          startTop = pinPoint.y;
+      var rect = this.$refs.pinpointImage.getBoundingClientRect();
+      var bounds = {
+        minX: 0,
+        minY: 0,
+        maxX: 100,
+        maxY: 100
+      };
+
+      var updatePosition = function updatePosition(event) {
+        var deltaX = (event.clientX - startX) / rect.width * 100;
+        var deltaY = (event.clientY - startY) / rect.height * 100;
+        pinPoint.x = Math.min(Math.max(startLeft + deltaX, bounds.minX), bounds.maxX);
+        pinPoint.y = Math.min(Math.max(startTop + deltaY, bounds.minY), bounds.maxY);
+      };
+
+      var stopDragging = function stopDragging() {
+        document.removeEventListener('mousemove', updatePosition);
+        document.removeEventListener('mouseup', stopDragging);
+      };
+
+      document.addEventListener('mousemove', updatePosition);
+      document.addEventListener('mouseup', stopDragging);
+    },
+    dragEnd: function dragEnd($event, item, index) {//let xy = this.getXyPosition($event);
+      //this.annotations[index].x = item.x + xy.x;
+      //this.annotations[index].y = item.y + xy.y;
     },
     updateOrder: _.debounce(function () {
       this.fieldValue.annotations = this.annotations;
@@ -9493,7 +9520,7 @@ var render = function () {
             [
               _c("div", { staticClass: "border-b border-r border-l" }, [
                 _c("img", {
-                  ref: "floorplan",
+                  ref: "pinpointImage",
                   attrs: { src: _vm.imageUrl },
                   on: { click: _vm.getClickedPosition },
                 }),
@@ -9506,10 +9533,9 @@ var render = function () {
                       {
                         staticClass: "pinpoint-annotate",
                         style: { top: item.y + "%", left: item.x + "%" },
-                        attrs: { draggable: "true" },
                         on: {
-                          dragend: function ($event) {
-                            return _vm.dragEnd($event, item, index)
+                          mousedown: function ($event) {
+                            return _vm.dragStart(index, $event)
                           },
                         },
                       },

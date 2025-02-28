@@ -60,15 +60,14 @@
             <div class="pin-point-image-image">
                 <div class="pinpoint-preview relative">
                     <div class="border-b border-r border-l">
-                        <img :src="imageUrl" ref="floorplan" @click="getClickedPosition" />
+                        <img :src="imageUrl" ref="pinpointImage" @click="getClickedPosition" />
                     </div>
                     <div
                         v-if="annotations.length"
                         v-for="(item, index) in annotations"
                         :style="{ top: item.y + '%', left: item.x + '%' }"
                         class="pinpoint-annotate"
-                        draggable="true"
-                        @dragend="dragEnd($event, item, index)"
+                        @mousedown="dragStart(index, $event)"
                     >
                         <span v-text="`${index + 1}`"></span>
                     </div>
@@ -269,8 +268,8 @@ export default {
             const xPosition = e.clientX - position.x - 40 / 2;
             const yPosition = e.clientY - position.y - 40 / 2;
 
-            const width = this.$refs.floorplan.clientWidth;
-            const height = this.$refs.floorplan.clientHeight;
+            const width = this.$refs.pinpointImage.clientWidth;
+            const height = this.$refs.pinpointImage.clientHeight;
 
             // convert position to percentage values
             let x = this.roundUp((xPosition / width) * 100, 0);
@@ -314,11 +313,37 @@ export default {
             this.fieldValue.annotations = this.annotations;
         },
 
-        dragEnd($event, item, index) {
-            let xy = this.getXyPosition($event);
+        dragStart(index, event) {
+            const pinPoint = this.annotations[index];
+            const { clientX: startX, clientY: startY } = event;
+            const { x: startLeft, y: startTop } = pinPoint;
 
-            this.annotations[index].x = item.x + xy.x;
-            this.annotations[index].y = item.y + xy.y;
+            const rect = this.$refs.pinpointImage.getBoundingClientRect();
+            const bounds = { minX: 0, minY: 0, maxX: 100, maxY: 100 };
+
+            const updatePosition = (event) => {
+                const deltaX = (event.clientX - startX) / rect.width * 100;
+                const deltaY = (event.clientY - startY) / rect.height * 100;
+
+                pinPoint.x = Math.min(Math.max(startLeft + deltaX, bounds.minX), bounds.maxX);
+                pinPoint.y = Math.min(Math.max(startTop + deltaY, bounds.minY), bounds.maxY);
+            };
+
+            const stopDragging = () => {
+                document.removeEventListener('mousemove', updatePosition);
+                document.removeEventListener('mouseup', stopDragging);
+            };
+
+            document.addEventListener('mousemove', updatePosition);
+            document.addEventListener('mouseup', stopDragging);
+        },
+
+
+        dragEnd($event, item, index) {
+            //let xy = this.getXyPosition($event);
+
+            //this.annotations[index].x = item.x + xy.x;
+            //this.annotations[index].y = item.y + xy.y;
         },
 
         updateOrder: _.debounce(function () {
